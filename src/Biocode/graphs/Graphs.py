@@ -4,7 +4,7 @@ from itertools import cycle
 
 import os
 
-PATH = "/out"
+PATH = "Biocode/out/graphs"
 
 
 class Graphs:

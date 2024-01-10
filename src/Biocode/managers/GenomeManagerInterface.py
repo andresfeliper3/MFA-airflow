@@ -1,8 +1,11 @@
 import pandas as pd
+import os
 
 from src.Biocode.sequences.Genome import Genome
 from src.Biocode.sequences.Sequence import Sequence
 from src.Biocode.managers.SequenceManager import SequenceManager
+
+PATH = "Biocode/out/results"
 
 
 class GenomeManagerInterface:
@@ -115,4 +118,13 @@ class GenomeManagerInterface:
         self.df_results['t(q=20)'] = [data_dict['tau_q_values'][-1] for data_dict in mfa_results]
 
         selected_df_results = self.df_results[selected_columns] if selected_columns else self.df_results
+        self._save_df_results(selected_df_results)
         return selected_df_results
+
+    def _save_df_results(self, df):
+        os.makedirs(PATH, exist_ok=True)
+
+        # Guardar el DataFrame en un archivo Excel
+        output_file = f'{PATH}/{self.organism_name}.xlsx'
+        with pd.ExcelWriter(output_file, engine='xlsxwriter') as writer:
+            df.to_excel(writer, index=False)

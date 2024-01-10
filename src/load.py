@@ -5,9 +5,18 @@ import os
 sequences_folder = "Biocode/dna_sequences"
 
 c_elegans_data = [
-    {"path": os.path.abspath(os.path.join(sequences_folder, "c_elegans", "c_elegans_chromosome_I.fasta")), "name": "chromosome_I"},
-    {"path": os.path.abspath(os.path.join(sequences_folder, "c_elegans", "c_elegans_chromosome_II.fasta")), "name": "chromosome_II"},
-    # Add more entries as needed
+    {"path": "c_elegans_chromosome_I.fasta", "name": "chromosome_I"},
+    {"path": "c_elegans_chromosome_II.fasta", "name": "chromosome_II"},
+    {"path": "c_elegans_chromosome_III.fasta", "name": "chromosome_III"},
+    {"path": "c_elegans_chromosome_IV.fasta", "name": "chromosome_IV"},
+    {"path": "c_elegans_chromosome_V.fasta", "name": "chromosome_V"},
+    {"path": "c_elegans_chromosome_X.fasta", "name": "chromosome_X"},
+]
+
+# Convertir los paths relativos a paths absolutos usando os.path.join
+c_elegans_data = [
+    {"path": os.path.abspath(os.path.join(sequences_folder, "c_elegans", entry["path"])), "name": entry["name"]}
+    for entry in c_elegans_data
 ]
 
 musa_acuminata_data = [

@@ -2,6 +2,8 @@
 
 src/Biocode/dna_sequences
 
+src/Biocode/out/
+
 .idea/
 
 logs/

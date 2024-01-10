@@ -8,6 +8,7 @@ biopython = "*"
 matplotlib = "*"
 numpy = "*"
 pandas = "*"
+xlsxwriter = "*"
 
 [dev-packages]
 
