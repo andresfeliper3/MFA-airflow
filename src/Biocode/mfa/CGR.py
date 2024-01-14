@@ -1,6 +1,7 @@
 import numpy as np
 from src.Biocode.sequences.Sequence import Sequence
 
+from src.Biocode.graphs.Graphs import Graphs
 
 class CGR:
     def __init__(self, sequence: Sequence, corners=None):
@@ -21,8 +22,8 @@ class CGR:
         current_position = np.array([0.5, 0.5])
 
         # Lists to store the x and y coordinates for plotting
-        x_coords = [current_position[0]]
-        y_coords = [current_position[1]]
+        self.x_coords = [current_position[0]]
+        self.y_coords = [current_position[1]]
 
         # Iterate through the sequence and plot points
         last_exists = True if self.seq[0] in self.corners else False
@@ -43,8 +44,8 @@ class CGR:
                 continue
             # Calculate the midpoint between the current position and the selected corner
             current_position = (current_position + np.array(corner)) / 2
-            x_coords.append(current_position[0])
-            y_coords.append(current_position[1])
+            self.x_coords.append(current_position[0])
+            self.y_coords.append(current_position[1])
 
         self.sum_nucleotides = sum(x for x in self.cover if x > 0)
         self.cover_percentage = self.sum_nucleotides / self.len_seq
@@ -52,10 +53,10 @@ class CGR:
         self.sequence.set_cover_percentage(self.cover_percentage)
 
         if graph:
-            Graphs.graph_cgr(x_coords, y_coords, title=title, with_grid=False)
+            Graphs.graph_cgr(self.x_coords, self.y_coords, title=title, with_grid=False)
 
         self.sequence.set_cover(self.cover)
-        return [x_coords, y_coords]
+        return [self.x_coords, self.y_coords]
 
     def generate_cgr_counting_grid_cells(self, graph=True, epsilon=0.01, title="Chaos Game Representation") -> list[
         list[float]]:
@@ -64,8 +65,8 @@ class CGR:
         current_position = np.array([0.5, 0.5])
 
         # Lists to store the x and y coordinates for plotting
-        x_coords = [current_position[0]]
-        y_coords = [current_position[1]]
+        self.x_coords = [current_position[0]]
+        self.y_coords = [current_position[1]]
 
         # Grid to store Mi values
         self.grid_size = int(1 / epsilon)
@@ -90,8 +91,8 @@ class CGR:
                 continue
             # Calculate the midpoint between the current position and the selected corner
             current_position = (current_position + np.array(corner)) / 2
-            x_coords.append(current_position[0])
-            y_coords.append(current_position[1])
+            self.x_coords.append(current_position[0])
+            self.y_coords.append(current_position[1])
 
             # Calculate the row and column index of the current point
             row = int(current_position[1] // epsilon) if int(current_position[1] // epsilon) < self.grid_size else int(
@@ -113,10 +114,13 @@ class CGR:
         self.sequence.set_cover_percentage(self.cover_percentage)
 
         if graph:
-            Graphs.graph_cgr(x_coords, y_coords, self.grid_size, title=title, epsilon=epsilon)
+            Graphs.graph_cgr(self.x_coords, self.y_coords, self.grid_size, title=title, epsilon=epsilon)
 
         self.sequence.set_cover(self.cover)
         return self.mi_grid
+
+    def graph_cgr(self, title):
+        Graphs.graph_cgr(self.x_coords, self.y_coords, self.grid_size, title=title, with_grid=False)
 
     def get_corners(self):
         return self.corners

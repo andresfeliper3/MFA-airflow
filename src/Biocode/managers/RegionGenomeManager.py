@@ -1,6 +1,9 @@
 from src.Biocode.managers.GenomeManagerInterface import GenomeManagerInterface
 from src.Biocode.sequences.Genome import Genome
 
+from src.Biocode.sequences.Sequence import Sequence
+from src.Biocode.graphs.Graphs import Graphs
+
 
 class RegionGenomeManager(GenomeManagerInterface):
     def __init__(self, genome: Genome = None, genome_data: list[dict] = None, chromosomes: list[Sequence] = None,

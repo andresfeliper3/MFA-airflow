@@ -1,6 +1,10 @@
 from src.Biocode.managers.SequenceManagerInterface import SequenceManagerInterface
 from src.Biocode.sequences.Sequence import Sequence
 
+from src.Biocode.managers.SequenceManager import SequenceManager
+from src.Biocode.sequences.RegionSequence import RegionSequence
+from src.Biocode.graphs.Graphs import Graphs
+
 
 class RegionSequenceManager(SequenceManagerInterface):
     def __init__(self, sequence: Sequence = None, sequence_data: dict = None, regions: list[Sequence] = None,
@@ -44,7 +48,7 @@ class RegionSequenceManager(SequenceManagerInterface):
 
     def _attach_managers(self):
         for region in self.regions:
-            self.managers.append(SequenceManager(sequence=region))
+            self.managers.append(SequenceManager(sequence=region, sequence_name=region.get_name()))
 
     def generate_mfa(self):
         for manager in self.managers:
@@ -56,6 +60,10 @@ class RegionSequenceManager(SequenceManagerInterface):
         for manager in self.managers:
             manager.generate_degree_of_multifractality()
             self.degree_of_multifractality.append(manager.get_degree_of_multifractality())
+
+    def graph_cgr(self):
+        for manager in self.managers:
+            manager.graph_cgr()
 
     def graph_3d_cgr(self, grid_size=512):
         for manager in self.managers:

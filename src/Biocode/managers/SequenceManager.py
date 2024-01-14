@@ -30,6 +30,9 @@ class SequenceManager(SequenceManagerInterface):
     def generate_degree_of_multifractality(self):
         self.degree_of_multifractality = self.mfa_generator.get_DDq()
 
+    def graph_cgr(self):
+        self.mfa_generator.get_cgr_gen().graph_cgr(title=f"CGR of {self.sequence_name}")
+
     def graph_3d_cgr(self, grid_size=512):
         epsilons = self.mfa_generator.get_epsilons()
         sizes = self.mfa_generator.get_sizes()

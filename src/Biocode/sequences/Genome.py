@@ -1,6 +1,8 @@
 from Bio import SeqIO
 from src.Biocode.sequences.Sequence import Sequence
 
+from src.Biocode.sequences.RegionSequence import RegionSequence
+
 
 class Genome:
     def __init__(self, chromosomes: list[Sequence] = None, chromosomes_data: list[dict] = None,

@@ -11,6 +11,10 @@ class SequenceManagerInterface:
         """Generate degrees of multifractality"""
         pass
 
+    def graph_cgr(self):
+        "Generate CGR without the grid"
+        pass
+
     def graph_3d_cgr(self, grid_size):
         """Graph CGR density in a 3D chart"""
         pass

@@ -4,6 +4,7 @@ import os
 from src.Biocode.sequences.Genome import Genome
 from src.Biocode.sequences.Sequence import Sequence
 from src.Biocode.managers.SequenceManager import SequenceManager
+from src.Biocode.managers.RegionSequenceManager import RegionSequenceManager
 
 PATH = "Biocode/out/results"
 
@@ -47,6 +48,11 @@ class GenomeManagerInterface:
         # coverage
         self.cover_percentage = []
         self.cover = []
+
+    def graph_cgr(self):
+        """Graph CGR for all the chromosomes"""
+        for manager in self.managers:
+            manager.graph_cgr()
 
     def graph_3d_cgr(self, all=True, index=0, grid_size=512):
         """Graph CGR density in a 3D chart"""
@@ -127,4 +133,4 @@ class GenomeManagerInterface:
         # Guardar el DataFrame en un archivo Excel
         output_file = f'{PATH}/{self.organism_name}.xlsx'
         with pd.ExcelWriter(output_file, engine='xlsxwriter') as writer:
-            df.to_excel(writer, index=False)
+            df.to_excel(writer, index=True)

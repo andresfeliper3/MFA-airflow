@@ -6,11 +6,11 @@ sequences_folder = "Biocode/dna_sequences"
 
 c_elegans_data = [
     {"path": "c_elegans_chromosome_I.fasta", "name": "chromosome_I"},
-    {"path": "c_elegans_chromosome_II.fasta", "name": "chromosome_II"},
-    {"path": "c_elegans_chromosome_III.fasta", "name": "chromosome_III"},
-    {"path": "c_elegans_chromosome_IV.fasta", "name": "chromosome_IV"},
-    {"path": "c_elegans_chromosome_V.fasta", "name": "chromosome_V"},
-    {"path": "c_elegans_chromosome_X.fasta", "name": "chromosome_X"},
+    #{"path": "c_elegans_chromosome_II.fasta", "name": "chromosome_II"},
+    #{"path": "c_elegans_chromosome_III.fasta", "name": "chromosome_III"},
+    #{"path": "c_elegans_chromosome_IV.fasta", "name": "chromosome_IV"},
+    #{"path": "c_elegans_chromosome_V.fasta", "name": "chromosome_V"},
+    #{"path": "c_elegans_chromosome_X.fasta", "name": "chromosome_X"},
 ]
 
 # Convertir los paths relativos a paths absolutos usando os.path.join
