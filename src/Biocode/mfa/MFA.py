@@ -115,12 +115,12 @@ class MFA:
     def graph_multifractal_spectrum(self):
         # Dq vs q
         Graphs.graph_one(x_array=self.q_values, y_array=self.Dq_values, x_label='q', y_label='Dq',
-                         title='Multifractal spectrum (Dq vs q)')
+                         title='Multifractal spectrum (Dq vs q)', name=self.sequence.get_name())
 
     def graph_correlation_exponent(self):
         # t(q) vs q
         Graphs.graph_one(x_array=self.q_values, y_array=self.tau_q_values, x_label='q', y_label='t(q)',
-                         title='Correlation exponent (t(q) vs q)')
+                         title='Correlation exponent (t(q) vs q)', name=self.sequence.get_name())
 
     def get_q_values(self):
         return self.q_values

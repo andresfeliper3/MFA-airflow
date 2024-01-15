@@ -10,14 +10,15 @@ PATH = "Biocode/out/graphs"
 class Graphs:
 
     @staticmethod
-    def _savefig(title):
+    def _savefig(title, name):
+        actual_path = f"{PATH}/{name}"
         plt.tight_layout()
-        if not os.path.exists(PATH):
-            os.makedirs(PATH)
-        plt.savefig(f'{PATH}/{title}.png')
+        if not os.path.exists(actual_path):
+            os.makedirs(actual_path)
+        plt.savefig(f'{actual_path}/{title}.png')
 
     @staticmethod
-    def graph_one(x_array, y_array, x_label, y_label, title, save=True):
+    def graph_one(x_array, y_array, x_label, y_label, title, name, save=True):
         plt.figure(figsize=(10, 6))
         plt.plot(x_array, y_array, marker='o')
         plt.xlabel(x_label)
@@ -25,13 +26,12 @@ class Graphs:
         plt.title(title)
         plt.grid()
         if save:
-            Graphs._savefig(title)
+            Graphs._savefig(title, name)
         plt.show()
 
     @staticmethod
-    def graph_many(results_array, X, Y, x_label, y_label, title, markers_array=None, linestyles_array=None,
-                   colors_array=None, labels_array=None,
-                   markersize=6, save=True):
+    def graph_many(results_array, X, Y, x_label, y_label, title, name, markers_array=None, linestyles_array=None,
+                   colors_array=None, labels_array=None, markersize=6, save=True):
         plt.figure(figsize=(10, 6))
 
         if markers_array is None:
@@ -55,11 +55,11 @@ class Graphs:
         plt.grid()
         plt.legend()
         if save:
-            Graphs._savefig(title)
+            Graphs._savefig(title, name)
         plt.show()
 
     @staticmethod
-    def graph_many_grouped(results_array, X, Y, x_label, y_label, title, regions_number=None, markers_array=None,
+    def graph_many_grouped(results_array, X, Y, x_label, y_label, title, name, regions_number=None, markers_array=None,
                            linestyles_array=None,
                            colors_array=None, labels_array=None, markersize=6, color_by='region', save=True):
         if not (regions_number >= 0):
@@ -94,11 +94,11 @@ class Graphs:
         plt.grid()
         plt.legend()
         if save:
-            Graphs._savefig(title)
+            Graphs._savefig(title, name)
         plt.show()
 
     @staticmethod
-    def graph_bars(x_array, y_array, title, y_label=None, bar_labels=None, bar_colors=None, legend=None, rotation=45,
+    def graph_bars(x_array, y_array, title, name, y_label=None, bar_labels=None, bar_colors=None, legend=None, rotation=45,
                    y_range: list[int] = None,
                    top_labels=False, save=True):
         fig, ax = plt.subplots()
@@ -124,11 +124,11 @@ class Graphs:
         ax.set_xticklabels(x_array, rotation=rotation)
         ax.legend(title=legend)
         if save:
-            Graphs._savefig(title)
+            Graphs._savefig(title, name)
         plt.show()
 
     @staticmethod
-    def graph_bars_grouped(x_array, y_array, title, regions_number=3, y_label=None, x_labels=None, legend_labels=None,
+    def graph_bars_grouped(x_array, y_array, title, name, regions_number=3, y_label=None, x_labels=None, legend_labels=None,
                            regions_colors=None, rotation=45, y_range: list[int] = None, top_labels=False, save=True):
         fig, ax = plt.subplots()
         bar_width = 0.1  # Width of each bar
@@ -182,7 +182,7 @@ class Graphs:
         ax.legend(legend_labels, title="Region color")
 
         if save:
-            Graphs._savefig(title)
+            Graphs._savefig(title, name)
         plt.show()
 
     """
@@ -193,7 +193,7 @@ class Graphs:
     """
 
     @staticmethod
-    def graph_3d_cgr(count_matrix: list[list[int]], title='Multifractal measure representation', x_start=0, x_end=1,
+    def graph_3d_cgr(count_matrix: list[list[int]], name, title='Multifractal measure representation', x_start=0, x_end=1,
                      y_start=0, y_end=1,
                      epsilon=0.01, save=True):
         # set up the figure and axes
@@ -214,11 +214,11 @@ class Graphs:
         ax1.bar3d(x, y, bottom, width, depth, Z, shade=True)
         ax1.set_title(title)
         if save:
-            Graphs._savefig(title)
+            Graphs._savefig(title, name)
         plt.show()
 
     @staticmethod
-    def graph_cgr(x_coords, y_coords, grid_size=None, epsilon=None, marker='o', markersize=0.005,
+    def graph_cgr(x_coords, y_coords, name, grid_size=None, epsilon=None, marker='o', markersize=0.005,
                   title="Chaos Game Representation", x_label="X", y_label="Y",
                   x_start=0, x_end=1, y_start=0, y_end=1, with_grid=True, linecolor='red', linewidth=0.1, save=True):
         # Plot the points
@@ -241,12 +241,12 @@ class Graphs:
                 plt.axhline(i * square_width, color=linecolor, linewidth=linewidth)
 
         if save:
-            Graphs._savefig(title)
+            Graphs._savefig(title, name)
 
         plt.show()
 
     @staticmethod
-    def graph_coverage_whole(values, title, graph_with='seaborn', save=True):
+    def graph_coverage_whole(values, title, name, graph_with='seaborn', save=True):
         # Create a list to store colors for each position in the binary sequence
         colors = ['green' if bit == 1 else 'red' for bit in values]
 
@@ -257,7 +257,7 @@ class Graphs:
             plt.xlabel('Position')
             plt.yticks([])
             if save:
-                Graphs._savefig(title)
+                Graphs._savefig(title, )
             plt.show()
 
         if graph_with == 'seaborn':
@@ -271,11 +271,11 @@ class Graphs:
             plt.xticks(
                 range(0, len(values), len(values) // 10))  # Adjust the denominator to control the number of ticks
             if save:
-                Graphs._savefig(title)
+                Graphs._savefig(title, name)
             plt.show()
 
     @staticmethod
-    def graph_coverage_without_scale(values: list[int], title, save=True):
+    def graph_coverage_without_scale(values: list[int], title, name, save=True):
         total = np.sum(np.abs(values))
         proportions = np.abs(values) / total
 
@@ -288,11 +288,11 @@ class Graphs:
         plt.xlabel('Index')
         plt.yticks([])  # Hide y-axis ticks
         if save:
-            Graphs._savefig(title)
+            Graphs._savefig(title, name)
         plt.show()
 
     @staticmethod
-    def graph_coverage(values: list[int], sequence_name: str, save=True):
+    def graph_coverage(values: list[int], sequence_name: str, name, save=True):
         total = np.sum(np.abs(values))
         proportions = np.abs(values) / total
 
@@ -319,11 +319,11 @@ class Graphs:
         plt.xlabel('Representative percentage of the sequence')
         plt.ylabel('Absolute Value')
         if save:
-            Graphs._savefig(title)
+            Graphs._savefig(title, name)
         plt.show()
 
     @staticmethod
-    def graph_vertical_coverage(values: list[int], sequence_name: str, save=True):
+    def graph_vertical_coverage(values: list[int], sequence_name: str, name, save=True):
         total = np.sum(np.abs(values))
         proportions = np.abs(values) / total
 
@@ -340,11 +340,11 @@ class Graphs:
         title = f"Coverage of the sequence {sequence_name}"
         plt.title(title)
         if save:
-            Graphs._savefig(title)
+            Graphs._savefig(title, name)
         plt.show()
 
     @staticmethod
-    def graph_linear_fit(fq_values: list[dict], epsilons: list[float], sequence_name: str, save=True):
+    def graph_linear_fit(fq_values: list[dict], epsilons: list[float], sequence_name: str, name, save=True):
         for index, fq_value in enumerate(fq_values):
             if fq_value['q'] % 2 == 0:
                 plt.plot(np.log(epsilons), fq_value['fq'], label=f"q = {fq_value['q']}")
@@ -355,5 +355,5 @@ class Graphs:
         title = f"fq vs ln(ε) for {sequence_name}"
         plt.title(title)
         if save:
-            Graphs._savefig(title)
+            Graphs._savefig(title, name)
         plt.show()

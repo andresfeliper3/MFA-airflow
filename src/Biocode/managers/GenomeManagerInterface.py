@@ -30,11 +30,12 @@ class GenomeManagerInterface:
             raise Exception("Not a valid regions_number for the GenomeManager constructor")
         elif regions_number == 0:
             for chromosome in self.genome.get_chromosomes():
-                self.managers.append(SequenceManager(sequence=chromosome, sequence_name=chromosome.get_name()))
+                self.managers.append(SequenceManager(sequence=chromosome, sequence_name=chromosome.get_name(),
+                                                     organism_name=organism_name))
         else:  # > 0
             for chromosome in self.genome.get_chromosomes():
                 self.managers.append(RegionSequenceManager(sequence=chromosome, sequence_name=chromosome.get_name(),
-                                                           regions_number=regions_number))
+                                                           regions_number=regions_number, organism_name=organism_name))
             # regions names
             self.regions_names = []
             self._attach_regions_names()
@@ -62,7 +63,7 @@ class GenomeManagerInterface:
             for manager in self.managers:
                 manager.graph_3d_cgr(grid_size)
 
-    def graph_linear_fit(self):
+    def graph_linear_fit(self, name):
         """Graph linear fit for fq vs ln(epsilon)"""
         for manager in self.managers:
             manager.graph_linear_fit()

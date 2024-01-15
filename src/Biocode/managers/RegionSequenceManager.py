@@ -8,7 +8,8 @@ from src.Biocode.graphs.Graphs import Graphs
 
 class RegionSequenceManager(SequenceManagerInterface):
     def __init__(self, sequence: Sequence = None, sequence_data: dict = None, regions: list[Sequence] = None,
-                 sequence_name: str = None, regions_number: int = 0):
+                 sequence_name: str = None, organism_name: str = None, regions_number: int = 0):
+        self.organism_name = organism_name
         if sequence:
             if type(sequence) == RegionSequence:
                 self.sequence = sequence
@@ -63,17 +64,17 @@ class RegionSequenceManager(SequenceManagerInterface):
 
     def graph_cgr(self):
         for manager in self.managers:
-            manager.graph_cgr()
+            manager.graph_cgr(name=f"regions/{self.organism_name}")
 
     def graph_3d_cgr(self, grid_size=512):
         for manager in self.managers:
-            manager.graph_3d_cgr(grid_size)
+            manager.graph_3d_cgr(grid_size, name=f"regions/{self.organism_name}")
 
     def graph_linear_fit(self):
         for index, regional_fq in enumerate(self.fq):
             Graphs.graph_linear_fit(fq_values=regional_fq,
                                     epsilons=self.managers[index].get_mfa_generator().get_epsilons(),
-                                    sequence_name=self.sequence.get_regions_names()[index])
+                                    sequence_name=self.sequence.get_regions_names()[index], name=f"regions/{self.organism_name}")
 
     def graph_degree_of_multifractality(self, y_range=None, top_labels=True):
         # Check if the lengths of x_array and y_array match
@@ -83,18 +84,17 @@ class RegionSequenceManager(SequenceManagerInterface):
         does not match the number of degrees of multifractality {len(self.degree_of_multifractality)} ({self.degree_of_multifractality}).")
 
         Graphs.graph_bars(x_array=self.sequence.get_regions_names(), y_array=self.degree_of_multifractality,
-                          title=f"Degree of multifractality by regions for {self.sequence_name}",
-                          y_label="Degree of multifractality",
-                          y_range=y_range, top_labels=top_labels)
+                          title=f"Degree of multifractality by regions for {self.sequence_name}", name=f"regions/{self.organism_name}",
+                          y_label="Degree of multifractality", y_range=y_range, top_labels=top_labels)
 
     def graph_multifractal_spectrum(self):
         Graphs.graph_many(results_array=self.mfa_results, X='q_values', Y='Dq_values', x_label='q', y_label='Dq',
-                          title=f'Dq vs q by regions for {self.sequence_name}',
+                          title=f'Dq vs q by regions for {self.sequence_name}', name=f"regions/{self.organism_name}",
                           labels_array=self.sequence.get_regions_names())
 
     def graph_correlation_exponent(self):
         Graphs.graph_many(results_array=self.mfa_results, X='q_values', Y='tau_q_values', x_label='q', y_label='t(q)',
-                          title=f't(q) vs q by regions for {self.sequence_name}',
+                          title=f't(q) vs q by regions for {self.sequence_name}', name=f"regions/{self.organism_name}",
                           labels_array=self.sequence.get_regions_names(), markersize=2)
 
     def _attach_cover_data(self):
@@ -112,7 +112,7 @@ class RegionSequenceManager(SequenceManagerInterface):
 
     def graph_coverage(self):
         for index, cover in enumerate(self.cover):
-            Graphs.graph_coverage(values=cover, sequence_name=self.regions[index].get_name())
+            Graphs.graph_coverage(values=cover, sequence_name=self.regions[index].get_name(), name=f"regions/{self.organism_name}")
 
     def set_sequence_name(self, sequence_name):
         self.sequence_name = sequence_name

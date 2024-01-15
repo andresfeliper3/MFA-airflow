@@ -53,7 +53,7 @@ class CGR:
         self.sequence.set_cover_percentage(self.cover_percentage)
 
         if graph:
-            Graphs.graph_cgr(self.x_coords, self.y_coords, title=title, with_grid=False)
+            Graphs.graph_cgr(self.x_coords, self.y_coords, title=title, name=self,with_grid=False)
 
         self.sequence.set_cover(self.cover)
         return [self.x_coords, self.y_coords]
@@ -119,8 +119,8 @@ class CGR:
         self.sequence.set_cover(self.cover)
         return self.mi_grid
 
-    def graph_cgr(self, title):
-        Graphs.graph_cgr(self.x_coords, self.y_coords, self.grid_size, title=title, with_grid=False)
+    def graph_cgr(self, title, name):
+        Graphs.graph_cgr(self.x_coords, self.y_coords, name=name, grid_size=self.grid_size, title=title, with_grid=False)
 
     def get_corners(self):
         return self.corners
