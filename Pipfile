@@ -9,6 +9,7 @@ matplotlib = "*"
 numpy = "*"
 pandas = "*"
 xlsxwriter = "*"
+pyyaml = "*"
 
 [dev-packages]
 

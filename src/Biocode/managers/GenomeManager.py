@@ -6,9 +6,8 @@ from src.Biocode.graphs.Graphs import Graphs
 
 class GenomeManager(GenomeManagerInterface):
     def __init__(self, genome: Genome = None, genome_data: list[dict] = None, chromosomes: list[Sequence] = None,
-                 organism_name: str = None,
-                 regions_number: int = 0):
-        super().__init__(genome, genome_data, chromosomes, organism_name, regions_number)
+                 organism_name: str = None):
+        super().__init__(genome, genome_data, chromosomes, organism_name, 0)
 
     def generate_degrees_of_multifractality(self):
         for manager in self.managers:
