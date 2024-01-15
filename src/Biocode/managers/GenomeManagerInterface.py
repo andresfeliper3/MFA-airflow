@@ -112,7 +112,7 @@ class GenomeManagerInterface:
         """Generate MFA values and graph them along with the coverage"""
         pass
 
-    def generate_df_results(self, mfa_results, row_labels, q_min, q_max, selected_columns: list = None, ):
+    def generate_df_results(self, mfa_results, row_labels, q_min, q_max, sheet, selected_columns: list = None):
         # Create an empty DataFrame with the correct number of rows
         self.df_results = pd.DataFrame(index=row_labels, columns=["D%d" % i for i in range(q_min, q_max + 1)])
 
@@ -124,13 +124,31 @@ class GenomeManagerInterface:
         self.df_results['t(q=20)'] = [data_dict['tau_q_values'][-1] for data_dict in mfa_results]
 
         selected_df_results = self.df_results[selected_columns] if selected_columns else self.df_results
-        self._save_df_results(selected_df_results)
+        self._save_df_results(selected_df_results, sheet)
         return selected_df_results
 
-    def _save_df_results(self, df):
+    def _save_df_results(self, df, sheet):
         os.makedirs(PATH, exist_ok=True)
 
-        # Guardar el DataFrame en un archivo Excel
+        # File path for the Excel file
         output_file = f'{PATH}/{self.organism_name}.xlsx'
-        with pd.ExcelWriter(output_file, engine='xlsxwriter') as writer:
-            df.to_excel(writer, index=True)
+
+        # Check if the file already exists
+        if os.path.exists(output_file):
+            # Load the existing Excel file
+            with pd.ExcelFile(output_file) as xls:
+                # Read the existing sheets into a dictionary of DataFrames
+                sheets = {sheet_name: xls.parse(sheet_name) for sheet_name in xls.sheet_names}
+
+            # Add the new sheet to the dictionary
+            sheets[sheet] = df
+
+            # Save all sheets back to the Excel file
+            with pd.ExcelWriter(output_file, engine='xlsxwriter') as writer:
+                for sheet_name, sheet_df in sheets.items():
+                    sheet_df.to_excel(writer, sheet_name=sheet_name, index=True)
+
+        else:
+            # If the file does not exist, create a new one
+            with pd.ExcelWriter(output_file, engine='xlsxwriter') as writer:
+                df.to_excel(writer, sheet_name=sheet, index=True)

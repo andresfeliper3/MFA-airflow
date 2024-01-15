@@ -10,6 +10,7 @@ numpy = "*"
 pandas = "*"
 xlsxwriter = "*"
 pyyaml = "*"
+openpyxl = "*"
 
 [dev-packages]
 

@@ -3,9 +3,9 @@ import os
 import yaml
 
 
-def process_sequence_data(sequences_folder, data):
+def process_sequence_data(sequences_folder, subfolder, data):
     return [
-        {"path": os.path.abspath(os.path.join(sequences_folder, entry["path"])), "name": entry["name"]}
+        {"path": os.path.abspath(os.path.join(sequences_folder, subfolder, entry["path"])), "name": entry["name"]}
         for entry in data
     ]
 
@@ -15,8 +15,8 @@ with open("sequences.yaml", "r") as sequences_file:
     config = yaml.safe_load(sequences_file)
 
 sequences_folder = config["sequences_folder"]
-c_elegans_data = process_sequence_data(sequences_folder, config["c_elegans_data"])
-musa_acuminata_data = process_sequence_data(sequences_folder, config["musa_acuminata_data"])
+c_elegans_data = process_sequence_data(sequences_folder, "c_elegans", config["c_elegans_data"])
+musa_acuminata_data = process_sequence_data(sequences_folder, "musa_acuminata", config["musa_acuminata_data"])
 
 
 # Function to read fasta sequence
