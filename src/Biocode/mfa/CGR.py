@@ -53,7 +53,7 @@ class CGR:
         self.sequence.set_cover_percentage(self.cover_percentage)
 
         if graph:
-            Graphs.graph_cgr(self.x_coords, self.y_coords, title=title, name=self,with_grid=False)
+            Graphs.graph_cgr(self.x_coords, self.y_coords, title=title, name=self.sequence.get_name(),with_grid=False)
 
         self.sequence.set_cover(self.cover)
         return [self.x_coords, self.y_coords]
