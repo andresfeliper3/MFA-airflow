@@ -3,6 +3,8 @@ from src.Biocode.sequences.Genome import Genome
 from src.Biocode.sequences.Sequence import Sequence
 from src.Biocode.graphs.Graphs import Graphs
 
+import os
+
 
 class GenomeManager(GenomeManagerInterface):
     def __init__(self, genome: Genome = None, genome_data: list[dict] = None, chromosomes: list[Sequence] = None,
@@ -68,7 +70,8 @@ class GenomeManager(GenomeManagerInterface):
         # Extract sequence names and use them as row labels
         q_min = self.managers[0].get_mfa_generator().get_q_min()
         q_max = self.managers[0].get_mfa_generator().get_q_max()
-        return super().generate_df_results(self.mfa_results, row_labels, q_min, q_max, "Whole Genome", selected_columns)
+        return super().generate_df_results(self.mfa_results, row_labels, q_min, q_max, "Whole Genome",
+                                           selected_columns)
 
     def set_organism_name(self, organism_name):
         self.organism_name = organism_name

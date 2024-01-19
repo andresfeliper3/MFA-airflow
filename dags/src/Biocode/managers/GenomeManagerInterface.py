@@ -6,7 +6,6 @@ from src.Biocode.sequences.Sequence import Sequence
 from src.Biocode.managers.SequenceManager import SequenceManager
 from src.Biocode.managers.RegionSequenceManager import RegionSequenceManager
 
-PATH = "Biocode/out/results"
 
 
 class GenomeManagerInterface:
@@ -129,10 +128,12 @@ class GenomeManagerInterface:
         return selected_df_results
 
     def _save_df_results(self, df, sheet):
-        os.makedirs(PATH, exist_ok=True)
+        directory = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')),
+                                             "out/results")
+        os.makedirs(directory, exist_ok=True)
 
         # File path for the Excel file
-        output_file = f'{PATH}/{self.organism_name}.xlsx'
+        output_file = f'{directory}/{self.organism_name}.xlsx'
 
         # Check if the file already exists
         if os.path.exists(output_file):
