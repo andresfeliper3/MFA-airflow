@@ -4,14 +4,15 @@ from itertools import cycle
 
 import os
 
-PATH = "Biocode/out/graphs"
-
 
 class Graphs:
 
     @staticmethod
     def _savefig(title, name):
-        actual_path = f"{PATH}/{name}"
+        directory = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')), "out/graphs")
+        os.makedirs(directory, exist_ok=True)
+
+        actual_path = f"{directory}/{name}"
         plt.tight_layout()
         if not os.path.exists(actual_path):
             os.makedirs(actual_path)
