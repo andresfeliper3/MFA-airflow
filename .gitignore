@@ -1,6 +1,9 @@
 *.fasta
+*.fna
+*.db
 *.xlsx
 *.csv
+*.png
 
 src/Biocode/dna_sequences
 

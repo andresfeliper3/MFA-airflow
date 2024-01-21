@@ -7,17 +7,20 @@ def MFA(organism_name, chromosome):
     try:
         import os
         import sys
+        import sqlite3
         sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
         from src.Biocode.managers.GenomeManager import GenomeManager
     except ImportError as e:
         print(f"Error importing necessary modules: {e}")
         raise
     c_elegans_manager = GenomeManager(genome_data=[chromosome], organism_name=organism_name)
-    c_elegans_manager.calculate_multifractal_analysis_values()
-    df = c_elegans_manager.generate_df_results()
+    df = c_elegans_manager.save_to_db()
+    #c_elegans_manager.calculate_multifractal_analysis_values()
+    #df = c_elegans_manager.generate_df_results()
     print(df)
     #c_elegans_manager.calculate_and_graph_only_merged()
    # print(c_elegans_manager.get_mfa_results())
+
     print("SUCCESS")
 
 
@@ -26,8 +29,9 @@ with DAG("analyze_organism", description="MFA of organism",
     """
     1. Read xlsx file and read organism info and GCF.
     2. Download the organism genome.
-    3. Execute the code.
-    4. Keep the files and data.
+    3. Execute the MFA.
+    4. Save the data in SQLite.
+    4. Generate xslx and png from the db.
     """
     from src.load import c_elegans_data
 

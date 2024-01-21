@@ -1,11 +1,11 @@
 import pandas as pd
 import os
+import sqlite3
 
 from src.Biocode.sequences.Genome import Genome
 from src.Biocode.sequences.Sequence import Sequence
 from src.Biocode.managers.SequenceManager import SequenceManager
 from src.Biocode.managers.RegionSequenceManager import RegionSequenceManager
-
 
 
 class GenomeManagerInterface:
@@ -129,7 +129,7 @@ class GenomeManagerInterface:
 
     def _save_df_results(self, df, sheet):
         directory = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')),
-                                             "out/results")
+                                 "out/results")
         os.makedirs(directory, exist_ok=True)
 
         # File path for the Excel file
@@ -154,3 +154,22 @@ class GenomeManagerInterface:
             # If the file does not exist, create a new one
             with pd.ExcelWriter(output_file, engine='xlsxwriter') as writer:
                 df.to_excel(writer, sheet_name=sheet, index=True)
+
+    def save_to_db(self):
+        directory = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')),
+                                 "MFA_analysis.db")
+        data = [("Caenorhabditis elegans", "GCF1"), ("Musa acuminata", "GCF2")]
+        print("directory:", directory)
+        conn = sqlite3.connect(directory)
+        cursor = conn.cursor()
+
+        # Example: Create a table and insert data
+       # cursor.executemany('INSERT INTO organisms (name, GCF) VALUES (?, ?)', data)
+        cursor.execute("SELECT * FROM organisms;")
+        rows = cursor.fetchall()
+        columns = [col[0] for col in cursor.description]
+        df = pd.DataFrame(rows, columns=columns)
+        # Commit and close the connection
+        conn.commit()
+        conn.close()
+        return df
