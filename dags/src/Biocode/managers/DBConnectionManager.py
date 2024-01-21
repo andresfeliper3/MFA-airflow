@@ -9,7 +9,8 @@ class DBConnectionManager:
 
     @staticmethod
     def start():
-        DBConnectionManager.conn = sqlite3.connect(directory)
+        DBConnectionManager.conn = sqlite3.connect(DBConnectionManager.db_directory)
+        DBConnectionManager.cursor = DBConnectionManager.conn.cursor()
 
     """
     Example usage:
@@ -17,36 +18,46 @@ class DBConnectionManager:
     columns = ["name", "GCF"]
     data = [("Organism1", "123"), ("Organism2", "456")]
     """
+
     @staticmethod
     def insert(table_name, columns: list, data: list):
-        query = f'INSERT INTO {table_name} ({", ".join(columns)}) VALUES ({", ".join(["?"] * len(columns))})'
-        cursor = DBConnectionManager.conn.cursor()
-        cursor.executemany(query, data)
-        conn.commit()
+        check_query = f'SELECT * FROM {table_name} WHERE {" AND ".join([f"{col} = ?" for col in columns])};'
+
+        for record in data:
+            DBConnectionManager.cursor.execute(check_query, record)
+            existing_record = DBConnectionManager.cursor.fetchone()
+
+            if existing_record:
+                print(f"Record {record} already exists. Skipping insertion.")
+            else:
+                insert_query = f'INSERT INTO {table_name} ({", ".join(columns)}) VALUES ({", ".join(["?"] * len(columns))});'
+                DBConnectionManager.cursor.execute(insert_query, record)
+
+        DBConnectionManager.conn.commit()
 
     @staticmethod
     def extract_all(table_name):
         query = f"SELECT * FROM {table_name};"
-        cursor.execute(query)
-        rows = cursor.fetchall()
+        DBConnectionManager.cursor.execute(query)
+        rows = DBConnectionManager.cursor.fetchall()
 
         if not rows:
             return None
 
-        columns = [col[0] for col in cursor.description]
+        columns = [col[0] for col in DBConnectionManager.cursor.description]
         df = pd.DataFrame(rows, columns=columns)
         return df
 
     @staticmethod
     def extract_by_target(table_name, column, target):
         query = f"SELECT * FROM {table_name} WHERE {column} = ?;"
-        cursor.execute(query, (target,))
-        rows = cursor.fetchall()
+        DBConnectionManager.cursor.execute(query, (target,))
+        rows =DBConnectionManager.cursor.fetchall()
 
         if not rows:
             return None
 
-        columns = [col[0] for col in cursor.description]
+        columns = [col[0] for col in DBConnectionManager.cursor.description]
         df = pd.DataFrame(rows, columns=columns)
         return df
 

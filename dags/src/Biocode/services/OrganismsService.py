@@ -1,5 +1,5 @@
 from src.Biocode.managers.DBConnectionManager import DBConnectionManager
-from AbstractService import AbstractService
+from src.Biocode.services.AbstractService import AbstractService
 
 
 class OrganismsService(AbstractService):

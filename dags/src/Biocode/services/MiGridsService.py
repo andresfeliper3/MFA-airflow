@@ -1,4 +1,4 @@
-from AbstractService import AbstractService
+from src.Biocode.services.AbstractService import AbstractService
 
 
 class MiGridsService(AbstractService):
