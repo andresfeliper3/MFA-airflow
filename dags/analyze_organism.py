@@ -2,12 +2,13 @@ from airflow import DAG
 from datetime import datetime
 from airflow.operators.python import PythonVirtualenvOperator
 
+def start_organism(organism_name):
+
 
 def MFA(organism_name, chromosome):
     try:
         import os
         import sys
-        import sqlite3
         sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
         from src.Biocode.managers.GenomeManager import GenomeManager
     except ImportError as e:
