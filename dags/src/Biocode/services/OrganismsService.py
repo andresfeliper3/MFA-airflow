@@ -6,7 +6,7 @@ class OrganismsService(AbstractService):
 
     def __init__(self):
         self.table_name = "organisms"
-        self.columns = ["name", "GCF"]
+        self.columns = ["name", "GCF", "amount_chromosomes"]
         self.pk_column = "id"
 
     def extract_by_GCF(self, GCF: str):

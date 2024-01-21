@@ -9,14 +9,14 @@ def _set_path():
     sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 
 
-def load_organism(organism_name, gcf):
+def load_organism(organism_name, gcf, amount_chromosomes):
     _set_path()
     from src.Biocode.managers.DBConnectionManager import DBConnectionManager
     from src.Biocode.services.OrganismsService import OrganismsService
 
     DBConnectionManager.start()
     organism_service = OrganismsService()
-    organism_service.insert(data=[(organism_name, gcf)])
+    organism_service.insert(data=[(organism_name, gcf, amount_chromosomes)])
     DBConnectionManager.close()
 
 
@@ -51,10 +51,11 @@ with DAG("analyze_organism", description="MFA of organism",
 
     ORGANISM_NAME = "Caenorhabditis elegans"
     GCF = "GCF_000002985.6"
+    AMOUNT_CHROMOSOMES = 6
 
     t1 = PythonOperator(task_id="load_org",
                         python_callable=load_organism,
-                        op_args=[ORGANISM_NAME, GCF])
+                        op_args=[ORGANISM_NAME, GCF, AMOUNT_CHROMOSOMES])
 
     for i, chromosome_data in enumerate(c_elegans_data[:1]):
         task_id = f"MFA_{i+1}"
