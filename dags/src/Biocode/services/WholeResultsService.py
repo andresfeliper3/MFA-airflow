@@ -1,3 +1,4 @@
+from src.Biocode.managers.DBConnectionManager import DBConnectionManager
 from src.Biocode.services.AbstractService import AbstractService
 
 

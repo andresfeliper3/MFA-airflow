@@ -16,26 +16,31 @@ def load_organism(organism_name, gcf, amount_chromosomes):
 
     DBConnectionManager.start()
     organism_service = OrganismsService()
-    organism_service.insert(data=[(organism_name, gcf, amount_chromosomes)])
+    organism_service.insert(record=(organism_name, gcf, amount_chromosomes))
     DBConnectionManager.close()
 
 
-def MFA(organism_name, chromosome):
+def MFA(organism_name, gcf, chromosome):
+
     try:
-        _set_path()
+        import os
+        import sys
+        sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
         from src.Biocode.managers.GenomeManager import GenomeManager
+        from src.Biocode.managers.DBConnectionManager import DBConnectionManager
     except ImportError as e:
         print(f"Error importing necessary modules: {e}")
         raise
+    DBConnectionManager.start()
     c_elegans_manager = GenomeManager(genome_data=[chromosome], organism_name=organism_name)
-    df = c_elegans_manager.save_to_db()
-    # c_elegans_manager.calculate_multifractal_analysis_values()
-    # df = c_elegans_manager.generate_df_results()
-    print(df)
-    # c_elegans_manager.calculate_and_graph_only_merged()
-    # print(c_elegans_manager.get_mfa_results())
+    c_elegans_manager.calculate_multifractal_analysis_values()
+    c_elegans_manager.save_to_db(GCF=gcf)
+    c_elegans_manager.generate_df_results()
 
+    # c_elegans_manager.calculate_and_graph_only_merged()
+    print(c_elegans_manager.get_mfa_results())
     print("SUCCESS")
+    DBConnectionManager.close()
 
 
 with DAG("analyze_organism", description="MFA of organism",
@@ -57,12 +62,12 @@ with DAG("analyze_organism", description="MFA of organism",
                         python_callable=load_organism,
                         op_args=[ORGANISM_NAME, GCF, AMOUNT_CHROMOSOMES])
 
-    for i, chromosome_data in enumerate(c_elegans_data[:1]):
+    for i, chromosome_data in enumerate(c_elegans_data):
         task_id = f"MFA_{i+1}"
         task = PythonVirtualenvOperator(
             task_id=task_id,
             python_callable=MFA,
-            op_args=[ORGANISM_NAME, chromosome_data],
+            op_args=[ORGANISM_NAME, GCF, chromosome_data],
             requirements=[
                 "biopython",
                 "matplotlib",
@@ -79,3 +84,5 @@ with DAG("analyze_organism", description="MFA of organism",
         if i > 0:
             task.set_upstream(dag.get_task(f"MFA_{i}"))
 
+        # TO DO: organism_id in chromosomes table
+        # DAG for graphing

@@ -98,7 +98,8 @@ class MFA:
             'q_values': self.q_values,
             'Dq_values': self.Dq_values,
             'tau_q_values': self.tau_q_values,
-            'DDq': self.DDq
+            'DDq': self.DDq,
+            'sequence_name': self.sequence.get_name()
         }
         return self.result
 

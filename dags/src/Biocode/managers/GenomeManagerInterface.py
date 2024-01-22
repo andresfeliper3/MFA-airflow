@@ -7,6 +7,12 @@ from src.Biocode.sequences.Sequence import Sequence
 from src.Biocode.managers.SequenceManager import SequenceManager
 from src.Biocode.managers.RegionSequenceManager import RegionSequenceManager
 
+from src.Biocode.services.WholeResultsService import WholeResultsService
+from src.Biocode.services.OrganismsService import OrganismsService
+from src.Biocode.services.ChromosomesService import ChromosomesService
+
+from src.Biocode.utils.utils import list_to_str, str_to_list
+
 
 class GenomeManagerInterface:
 
@@ -155,21 +161,19 @@ class GenomeManagerInterface:
             with pd.ExcelWriter(output_file, engine='xlsxwriter') as writer:
                 df.to_excel(writer, sheet_name=sheet, index=True)
 
-    def save_to_db(self):
-        directory = os.path.join(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', '..')),
-                                 "MFA_analysis.db")
-        data = [("Caenorhabditis elegans", "GCF1"), ("Musa acuminata", "GCF2")]
-        print("directory:", directory)
-        conn = sqlite3.connect(directory)
-        cursor = conn.cursor()
+    def save_to_db(self, GCF):
+        whole_results_service = WholeResultsService()
+        organisms_service = OrganismsService()
+        chromosomes_service = ChromosomesService()
+        """
+        [(val1, val2), (val1, val2)]
+        ["chromosome_id", "Dq_values", "tau_q_values", "DDq"]
+        [{"q_values", "Dq_values", "tau_q_values", "DDq"}]
+        """
+        organism_id = organisms_service.extract_by_GCF(GCF=GCF).loc[0, 'id']
+        print("organism_id1:", organism_id)
+        for result in self.mfa_results:
 
-        # Example: Create a table and insert data
-       # cursor.executemany('INSERT INTO organisms (name, GCF) VALUES (?, ?)', data)
-        cursor.execute("SELECT * FROM organisms;")
-        rows = cursor.fetchall()
-        columns = [col[0] for col in cursor.description]
-        df = pd.DataFrame(rows, columns=columns)
-        # Commit and close the connection
-        conn.commit()
-        conn.close()
-        return df
+            chromosome_id = chromosomes_service.insert(record=(result['sequence_name'], organism_id))
+            whole_results_service.insert(record=(chromosome_id, list_to_str(result['Dq_values'].tolist()),
+                                                 list_to_str(result['tau_q_values'].tolist()), list_to_str(result['DDq'])))

@@ -20,20 +20,24 @@ class DBConnectionManager:
     """
 
     @staticmethod
-    def insert(table_name, columns: list, data: list):
+    def insert(table_name, columns: list, record: tuple):
         check_query = f'SELECT * FROM {table_name} WHERE {" AND ".join([f"{col} = ?" for col in columns])};'
+        print("columns:", columns)
+        print("record:", record)
+        print("check query:", check_query)
+        DBConnectionManager.cursor.execute(check_query, tuple(record))
+        existing_record = DBConnectionManager.cursor.fetchone()
 
-        for record in data:
-            DBConnectionManager.cursor.execute(check_query, record)
-            existing_record = DBConnectionManager.cursor.fetchone()
-
-            if existing_record:
-                print(f"Record {record} already exists. Skipping insertion.")
-            else:
-                insert_query = f'INSERT INTO {table_name} ({", ".join(columns)}) VALUES ({", ".join(["?"] * len(columns))});'
-                DBConnectionManager.cursor.execute(insert_query, record)
+        if existing_record:
+            print(f"Record {record} already exists. Skipping insertion.")
+        else:
+            insert_query = f'INSERT INTO {table_name} ({", ".join(columns)}) VALUES ({", ".join(["?"] * len(columns))});'
+            print("insert query:", insert_query)
+            DBConnectionManager.cursor.execute(insert_query, tuple(record))
 
         DBConnectionManager.conn.commit()
+        last_inserted_id = DBConnectionManager.cursor.lastrowid
+        return last_inserted_id
 
     @staticmethod
     def extract_all(table_name):
