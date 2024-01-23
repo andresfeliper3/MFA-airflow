@@ -170,8 +170,7 @@ class GenomeManagerInterface:
         ["chromosome_id", "Dq_values", "tau_q_values", "DDq"]
         [{"q_values", "Dq_values", "tau_q_values", "DDq"}]
         """
-        organism_id = organisms_service.extract_by_GCF(GCF=GCF).loc[0, 'id']
-        print("organism_id1:", organism_id)
+        organism_id = int(organisms_service.extract_by_GCF(GCF=GCF).loc[0, 'id'])
         for result in self.mfa_results:
 
             chromosome_id = chromosomes_service.insert(record=(result['sequence_name'], organism_id))
