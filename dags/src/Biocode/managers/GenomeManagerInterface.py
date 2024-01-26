@@ -171,8 +171,12 @@ class GenomeManagerInterface:
         [{"q_values", "Dq_values", "tau_q_values", "DDq"}]
         """
         organism_id = int(organisms_service.extract_by_GCF(GCF=GCF).loc[0, 'id'])
-        for result in self.mfa_results:
+        for index, result in enumerate(self.mfa_results):
 
-            chromosome_id = chromosomes_service.insert(record=(result['sequence_name'], organism_id))
+            print("cover:", self.cover[index])
+            print("cover percentage:", self.cover_percentage[index])
+            chromosome_id = chromosomes_service.insert(record=(result['sequence_name'], organism_id,
+                                                               list_to_str(self.cover[index]),
+                                                               self.cover_percentage[index]))
             whole_results_service.insert(record=(chromosome_id, list_to_str(result['Dq_values'].tolist()),
                                                  list_to_str(result['tau_q_values'].tolist()), list_to_str(result['DDq'])))

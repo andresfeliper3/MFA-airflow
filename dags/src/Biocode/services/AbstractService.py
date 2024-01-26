@@ -4,7 +4,8 @@ from src.Biocode.managers.DBConnectionManager import DBConnectionManager
 class AbstractService:
 
     def insert(self, record: tuple):
-        return DBConnectionManager.insert(table_name=self.table_name, columns=self.columns, record=record)
+        return DBConnectionManager.insert(table_name=self.table_name, columns=self.columns, pk=self.pk_column,
+                                          record=record)
 
     def extract_all(self):
         return DBConnectionManager.extract_all(table_name=self.table_name)

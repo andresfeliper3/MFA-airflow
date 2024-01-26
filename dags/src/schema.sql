@@ -10,7 +10,9 @@ CREATE TABLE organisms (
 CREATE TABLE chromosomes (
     id INTEGER PRIMARY KEY,
     name VARCHAR,
-    organism_id INTEGER REFERENCES organisms(id)
+    organism_id INTEGER REFERENCES organisms(id),
+    cover_percentage REAL,
+    cover REAL[]
 )
 
 -- Create mi_grids table with foreign key constraint

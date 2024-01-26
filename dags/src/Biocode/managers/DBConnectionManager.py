@@ -20,8 +20,8 @@ class DBConnectionManager:
     """
 
     @staticmethod
-    def insert(table_name, columns: list, record: tuple):
-        check_query = f'SELECT * FROM {table_name} WHERE {" AND ".join([f"{col} = ?" for col in columns])};'
+    def insert(table_name, columns: list, pk, record: tuple):
+        check_query = f'SELECT * FROM {table_name} WHERE {" AND ".join([f"{col} = ?" for col in columns if col != pk])};'
         DBConnectionManager.cursor.execute(check_query, tuple(record))
         existing_record = DBConnectionManager.cursor.fetchone()
 
