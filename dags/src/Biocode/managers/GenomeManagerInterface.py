@@ -7,9 +7,6 @@ from src.Biocode.sequences.Sequence import Sequence
 from src.Biocode.managers.SequenceManager import SequenceManager
 from src.Biocode.managers.RegionSequenceManager import RegionSequenceManager
 
-from src.Biocode.services.WholeResultsService import WholeResultsService
-from src.Biocode.services.OrganismsService import OrganismsService
-from src.Biocode.services.ChromosomesService import ChromosomesService
 
 from src.Biocode.utils.utils import list_to_str, str_to_list
 
@@ -19,7 +16,6 @@ class GenomeManagerInterface:
     def __init__(self, genome: Genome = None, genome_data: list[dict] = None, chromosomes: list[Sequence] = None,
                  organism_name: str = None,
                  regions_number: int = 0):
-
         self.df_results = None
         self.regions_number = regions_number
         if genome:
@@ -30,7 +26,7 @@ class GenomeManagerInterface:
             self.genome = Genome(chromosomes=chromosomes, regions_number=regions_number)
 
         # Managers
-        if genome:
+        if self.genome:
             self.managers = []
             if regions_number < 0:
                 raise Exception("Not a valid regions_number for the GenomeManager constructor")
@@ -41,7 +37,8 @@ class GenomeManagerInterface:
             else:  # > 0
                 for chromosome in self.genome.get_chromosomes():
                     self.managers.append(RegionSequenceManager(sequence=chromosome, sequence_name=chromosome.get_name(),
-                                                               regions_number=regions_number, organism_name=organism_name))
+                                                               regions_number=regions_number,
+                                                               organism_name=organism_name))
                 # regions names
                 self.regions_names = []
                 self._attach_regions_names()
@@ -163,19 +160,22 @@ class GenomeManagerInterface:
                 df.to_excel(writer, sheet_name=sheet, index=True)
 
     def save_to_db(self, GCF):
-        whole_results_service = WholeResultsService()
-        organisms_service = OrganismsService()
-        chromosomes_service = ChromosomesService()
-        """
-        [(val1, val2), (val1, val2)]
-        ["chromosome_id", "Dq_values", "tau_q_values", "DDq"]
-        [{"q_values", "Dq_values", "tau_q_values", "DDq"}]
-        """
-        organism_id = int(organisms_service.extract_by_GCF(GCF=GCF).loc[0, 'id'])
-        for index, result in enumerate(self.mfa_results):
+        pass
 
+    def set_organism_name(self, organism_name):
+        self.organism_name = organism_name
 
-            chromosome_id = chromosomes_service.insert(record=(result['sequence_name'], organism_id,
-                                                               self.cover_percentage[index], list_to_str(self.cover[index])))
-            whole_results_service.insert(record=(chromosome_id, list_to_str(result['Dq_values'].tolist()),
-                                                 list_to_str(result['tau_q_values'].tolist()), list_to_str(result['DDq'])))
+    def set_mfa_results(self, mfa_results: list):
+        self.mfa_results = mfa_results
+
+    def set_flattened_mfa_results(self, flattened_mfa_results: list):
+        self.flattened_mfa_results = flattened_mfa_results
+
+    def set_degrees_of_multifractality(self, degrees_of_multifractality: list):
+        self.degrees_of_multifractality = degrees_of_multifractality
+
+    def set_cover(self, cover: list):
+        self.cover = cover
+
+    def set_cover_percentage(self, cover_percentage: list):
+        self.cover_percentage = cover_percentage

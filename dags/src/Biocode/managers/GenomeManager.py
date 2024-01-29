@@ -3,6 +3,12 @@ from src.Biocode.sequences.Genome import Genome
 from src.Biocode.sequences.Sequence import Sequence
 from src.Biocode.graphs.Graphs import Graphs
 
+from src.Biocode.services.WholeResultsService import WholeResultsService
+from src.Biocode.services.OrganismsService import OrganismsService
+from src.Biocode.services.ChromosomesService import ChromosomesService
+
+from src.Biocode.utils.utils import list_to_str, str_to_list
+
 import os
 
 
@@ -74,20 +80,25 @@ class GenomeManager(GenomeManagerInterface):
         return super().generate_df_results(self.mfa_results, row_labels, q_min, q_max, "Whole Genome",
                                            selected_columns)
 
-    def set_organism_name(self, organism_name):
-        self.organism_name = organism_name
+    def save_to_db(self, GCF):
+        whole_results_service = WholeResultsService()
+        organisms_service = OrganismsService()
+        chromosomes_service = ChromosomesService()
+        """
+        [(val1, val2), (val1, val2)]
+        ["chromosome_id", "Dq_values", "tau_q_values", "DDq"]
+        [{"q_values", "Dq_values", "tau_q_values", "DDq"}]
+        """
+        organism_id = int(organisms_service.extract_by_GCF(GCF=GCF).loc[0, 'id'])
+        for index, result in enumerate(self.mfa_results):
+            chromosome_id = chromosomes_service.insert(record=(result['sequence_name'], organism_id,
+                                                               self.cover_percentage[index],
+                                                               list_to_str(self.cover[index])))
+            whole_results_service.insert(record=(chromosome_id, list_to_str(result['Dq_values'].tolist()),
+                                                 list_to_str(result['tau_q_values'].tolist()),
+                                                 list_to_str(result['DDq'])))
 
-    def set_mfa_results(self, mfa_results: list):
-        self.mfa_results = mfa_results
 
-    def set_degrees_of_multifractality(self, degrees_of_multifractality: list):
-        self.degrees_of_multifractality = degrees_of_multifractality
-
-    def set_cover(self, cover: list):
-        self.cover = cover
-
-    def set_cover_percentage(self, cover_percentage: list):
-        self.cover_percentage = cover_percentage
 
     def get_organism_name(self):
         return self.organism_name

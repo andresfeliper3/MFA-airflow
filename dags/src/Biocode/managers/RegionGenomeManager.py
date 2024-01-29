@@ -4,6 +4,12 @@ from src.Biocode.sequences.Genome import Genome
 from src.Biocode.sequences.Sequence import Sequence
 from src.Biocode.graphs.Graphs import Graphs
 
+from src.Biocode.services.RegionResultsService import RegionResultsService
+from src.Biocode.services.OrganismsService import OrganismsService
+from src.Biocode.services.ChromosomesService import ChromosomesService
+
+from src.Biocode.utils.utils import list_to_str, str_to_list
+
 
 class RegionGenomeManager(GenomeManagerInterface):
     def __init__(self, genome: Genome = None, genome_data: list[dict] = None, chromosomes: list[Sequence] = None,
@@ -57,12 +63,15 @@ class RegionGenomeManager(GenomeManagerInterface):
 
     def calculate_multifractal_analysis_values(self):
         super().calculate_multifractal_analysis_values()
-        self._generate_flattened_mfa_results_and_cover()
+        self.generate_flattened_mfa_results_and_cover()
 
-    def _generate_flattened_mfa_results_and_cover(self):
-        self.flattened_mfa_results = [region for chromosome in self.mfa_results for region in chromosome]
+    def generate_flattened_mfa_results_and_cover(self):
+        self.generate_flattened_mfa_results_only()
         self.cover_percentage = [region for chromosome in self.cover_percentage for region in chromosome]
         self.cover = [region for chromosome in self.cover for region in chromosome]
+
+    def generate_flattened_mfa_results_only(self):
+        self.flattened_mfa_results = [region for chromosome in self.mfa_results for region in chromosome]
 
     def graph_multifractal_analysis_merged(self, y_range_degrees_of_multifractality=None,
                                            degrees_of_multifractality=True,
@@ -113,7 +122,27 @@ class RegionGenomeManager(GenomeManagerInterface):
         q_min = self.managers[0].get_managers()[0].get_mfa_generator().get_q_min()
         q_max = self.managers[0].get_managers()[0].get_mfa_generator().get_q_max()
         return super().generate_df_results(self.flattened_mfa_results, row_labels, q_min, q_max, "With regions",
-                                        selected_columns)
+                                           selected_columns)
+
+    def save_to_db(self, GCF):
+        region_results_service = RegionResultsService()
+        organisms_service = OrganismsService()
+        chromosomes_service = ChromosomesService()
+        """
+        [(val1, val2), (val1, val2)]
+        ["chromosome_id", "Dq_values", "tau_q_values", "DDq"]
+        [{"q_values", "Dq_values", "tau_q_values", "DDq"}]
+        
+        """
+        organism_id = int(organisms_service.extract_by_GCF(GCF=GCF).loc[0, 'id'])
+        for index, result in enumerate(self.flattened_mfa_results):
+            chromosome_id = chromosomes_service.insert(record=(result['sequence_name'], organism_id,
+                                                               self.cover_percentage[index],
+                                                               list_to_str(self.cover[index])))
+            region_results_service.insert(record=(self.regions_number, chromosome_id,
+                                                  list_to_str(result['Dq_values'].tolist()),
+                                                  list_to_str(result['tau_q_values'].tolist()),
+                                                  list_to_str(result['DDq'])))
 
     def set_organism_name(self, organism_name):
         self.organism_name = organism_name
