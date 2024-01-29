@@ -30,20 +30,21 @@ class GenomeManagerInterface:
             self.genome = Genome(chromosomes=chromosomes, regions_number=regions_number)
 
         # Managers
-        self.managers = []
-        if regions_number < 0:
-            raise Exception("Not a valid regions_number for the GenomeManager constructor")
-        elif regions_number == 0:
-            for chromosome in self.genome.get_chromosomes():
-                self.managers.append(SequenceManager(sequence=chromosome, sequence_name=chromosome.get_name(),
-                                                     organism_name=organism_name))
-        else:  # > 0
-            for chromosome in self.genome.get_chromosomes():
-                self.managers.append(RegionSequenceManager(sequence=chromosome, sequence_name=chromosome.get_name(),
-                                                           regions_number=regions_number, organism_name=organism_name))
-            # regions names
-            self.regions_names = []
-            self._attach_regions_names()
+        if genome:
+            self.managers = []
+            if regions_number < 0:
+                raise Exception("Not a valid regions_number for the GenomeManager constructor")
+            elif regions_number == 0:
+                for chromosome in self.genome.get_chromosomes():
+                    self.managers.append(SequenceManager(sequence=chromosome, sequence_name=chromosome.get_name(),
+                                                         organism_name=organism_name))
+            else:  # > 0
+                for chromosome in self.genome.get_chromosomes():
+                    self.managers.append(RegionSequenceManager(sequence=chromosome, sequence_name=chromosome.get_name(),
+                                                               regions_number=regions_number, organism_name=organism_name))
+                # regions names
+                self.regions_names = []
+                self._attach_regions_names()
 
         # name of organism
         self.organism_name = organism_name
@@ -173,10 +174,8 @@ class GenomeManagerInterface:
         organism_id = int(organisms_service.extract_by_GCF(GCF=GCF).loc[0, 'id'])
         for index, result in enumerate(self.mfa_results):
 
-            print("cover:", self.cover[index])
-            print("cover percentage:", self.cover_percentage[index])
+
             chromosome_id = chromosomes_service.insert(record=(result['sequence_name'], organism_id,
-                                                               list_to_str(self.cover[index]),
-                                                               self.cover_percentage[index]))
+                                                               self.cover_percentage[index], list_to_str(self.cover[index])))
             whole_results_service.insert(record=(chromosome_id, list_to_str(result['Dq_values'].tolist()),
                                                  list_to_str(result['tau_q_values'].tolist()), list_to_str(result['DDq'])))

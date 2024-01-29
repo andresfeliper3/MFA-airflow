@@ -11,6 +11,7 @@ class GenomeManager(GenomeManagerInterface):
                  organism_name: str = None):
         super().__init__(genome, genome_data, chromosomes, organism_name, 0)
 
+
     def generate_degrees_of_multifractality(self):
         for manager in self.managers:
             manager.generate_degree_of_multifractality()
@@ -75,6 +76,18 @@ class GenomeManager(GenomeManagerInterface):
 
     def set_organism_name(self, organism_name):
         self.organism_name = organism_name
+
+    def set_mfa_results(self, mfa_results: list):
+        self.mfa_results = mfa_results
+
+    def set_degrees_of_multifractality(self, degrees_of_multifractality: list):
+        self.degrees_of_multifractality = degrees_of_multifractality
+
+    def set_cover(self, cover: list):
+        self.cover = cover
+
+    def set_cover_percentage(self, cover_percentage: list):
+        self.cover_percentage = cover_percentage
 
     def get_organism_name(self):
         return self.organism_name

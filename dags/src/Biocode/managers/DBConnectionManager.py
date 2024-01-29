@@ -62,5 +62,17 @@ class DBConnectionManager:
         return df
 
     @staticmethod
+    def extract_with_custom_query(query):
+        DBConnectionManager.cursor.execute(query)
+        rows = DBConnectionManager.cursor.fetchall()
+
+        if not rows:
+            return None
+
+        columns = [col[0] for col in DBConnectionManager.cursor.description]
+        df = pd.DataFrame(rows, columns=columns)
+        return df
+
+    @staticmethod
     def close():
         DBConnectionManager.conn.close()

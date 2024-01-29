@@ -1,6 +1,7 @@
 from airflow import DAG
 from datetime import datetime
 from airflow.operators.python import PythonVirtualenvOperator, PythonOperator
+from airflow.operators.empty import EmptyOperator
 
 
 def _set_path():
@@ -54,6 +55,7 @@ with DAG("analyze_organism", description="MFA of organism",
     """
     from src.load import c_elegans_data
 
+    data = c_elegans_data
     ORGANISM_NAME = "Caenorhabditis elegans"
     GCF = "GCF_000002985.6"
     AMOUNT_CHROMOSOMES = 6
@@ -62,7 +64,7 @@ with DAG("analyze_organism", description="MFA of organism",
                         python_callable=load_organism,
                         op_args=[ORGANISM_NAME, GCF, AMOUNT_CHROMOSOMES])
 
-    for i, chromosome_data in enumerate(c_elegans_data):
+    for i, chromosome_data in enumerate(data):
         task_id = f"MFA_{i+1}"
         task = PythonVirtualenvOperator(
             task_id=task_id,
@@ -84,5 +86,8 @@ with DAG("analyze_organism", description="MFA of organism",
         if i > 0:
             task.set_upstream(dag.get_task(f"MFA_{i}"))
 
-        # TO DO: organism_id in chromosomes table
-        # DAG for graphing
+    empty = EmptyOperator(task_id="MFA_end")
+    empty.set_upstream(dag.get_task(f"MFA_{len(data)}"))
+    # DAG for graphing
+
+amount_tasks = len(dag.tasks)
