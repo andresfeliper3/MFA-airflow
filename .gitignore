@@ -5,7 +5,9 @@
 *.csv
 *.png
 
-src/Biocode/dna_sequences
+src/Biocode/dna_sequences/test/
+
+
 
 src/Biocode/out/
 
