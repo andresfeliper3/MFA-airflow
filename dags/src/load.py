@@ -42,3 +42,26 @@ chromosome_I_c_elegans = read_fasta_sequence(fasta_path_c_elegans_cI)
 
 fasta_path_musa_cI = musa_acuminata_data[0]["path"]
 chromosome_I_musa = read_fasta_sequence(fasta_path_musa_cI)
+
+# NEW VERSION
+ORGANISM_NAME = config['organism_name']
+GCF = config['GCF']
+AMOUNT_CHROMOSOMES = config['amount_chromosomes']
+REGIONS_NUMBER = config['regions_number']
+ORGANISM_FOLDER = config['organism_folder']
+
+organism_path = os.path.abspath(os.path.join(sequences_folder, ORGANISM_FOLDER))
+
+
+def create_sequence_data_dict(path):
+    files = os.listdir(path)
+    for file in files:
+        file_path = os.path.join(path, file)
+    return [
+        {"path": file_path, "name": file.split(".")[0]}
+        for file in files
+    ]
+
+
+data = create_sequence_data_dict(organism_path)
+print(data)

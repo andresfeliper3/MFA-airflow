@@ -1,5 +1,6 @@
 from Bio import SeqIO
 
+
 def extract_all_chromosomes(fasta_file):
     """
     Extract all chromosomes from a genome FASTA file.
@@ -15,8 +16,9 @@ def extract_all_chromosomes(fasta_file):
 
     return records
 
+
 # Example usage
-fasta_file_path = "Biocode/dna_sequences/GCF_028009165.1/GCF_028009165.1_ASM2800916v1_genomic.fna"
+fasta_file_path = "Biocode/dna_sequences/test/GCF_000002985.6_WBcel235_cds_from_genomic.fna"
 
 # Extract all chromosomes
 all_chromosomes = extract_all_chromosomes(fasta_file_path)
@@ -24,5 +26,5 @@ all_chromosomes = extract_all_chromosomes(fasta_file_path)
 # Print information about each chromosome
 for chromosome_name, chromosome_record in all_chromosomes.items():
     print(f"Chromosome Name: {chromosome_name}")
-    #print(f"Chromosome Sequence: {chromosome_record.seq}")
+    # print(f"Chromosome Sequence: {chromosome_record.seq}")
     print()
