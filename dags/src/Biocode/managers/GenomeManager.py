@@ -90,6 +90,8 @@ class GenomeManager(GenomeManagerInterface):
         [{"q_values", "Dq_values", "tau_q_values", "DDq"}]
         """
         organism_id = int(organisms_service.extract_by_GCF(GCF=GCF).loc[0, 'id'])
+        print("mfa_results")
+        print(self.mfa_results)
         for index, result in enumerate(self.mfa_results):
             chromosome_id = chromosomes_service.insert(record=(result['sequence_name'], organism_id,
                                                                self.cover_percentage[index],

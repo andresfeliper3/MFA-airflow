@@ -55,13 +55,13 @@ organism_path = os.path.abspath(os.path.join(sequences_folder, ORGANISM_FOLDER))
 
 def create_sequence_data_dict(path):
     files = os.listdir(path)
-    for file in files:
-        file_path = os.path.join(path, file)
     return [
-        {"path": file_path, "name": file.split(".")[0]}
+        {"path": os.path.join(path, file), "name": file.split(".")[0]}
         for file in files
     ]
 
 
 data = create_sequence_data_dict(organism_path)
 print(data)
+
+
