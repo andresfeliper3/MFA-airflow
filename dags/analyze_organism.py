@@ -3,10 +3,6 @@ from datetime import datetime
 from airflow.operators.python import PythonVirtualenvOperator, PythonOperator
 from airflow.operators.empty import EmptyOperator
 
-ORGANISM_NAME = "Caenorhabditis elegans"
-GCF = "GCF_000002985.6"
-AMOUNT_CHROMOSOMES = 6
-REGIONS_NUMBER = 3
 
 def _set_path():
     import os
@@ -76,9 +72,7 @@ with DAG("analyze_organism", description="MFA of organism",
     4. Save the data in SQLite.
     4. Generate xslx and png from the db.
     """
-    from src.load import c_elegans_data
-
-    data = c_elegans_data
+    from src.load import data, ORGANISM_NAME, GCF, AMOUNT_CHROMOSOMES, REGIONS_NUMBER
 
     t1 = PythonOperator(task_id="load_org",
                         python_callable=load_organism,
@@ -94,7 +88,8 @@ with DAG("analyze_organism", description="MFA of organism",
             requirements=[
                 "biopython",
                 "xlsxwriter",
-                "openpyxl"
+                "openpyxl",
+                "matplotlib"
                 # Add other dependencies as needed
             ],
         )
@@ -110,7 +105,6 @@ with DAG("analyze_organism", description="MFA of organism",
     empty = EmptyOperator(task_id="whole_end")
     empty.set_upstream(dag.get_task(f"whole_{len(data)}"))
 
-
     for i, chromosome_data in enumerate(data):
         task_id = f"regions_{i + 1}"
         task = PythonVirtualenvOperator(
@@ -120,7 +114,8 @@ with DAG("analyze_organism", description="MFA of organism",
             requirements=[
                 "biopython",
                 "xlsxwriter",
-                "openpyxl"
+                "openpyxl",
+                "matplotlib"
                 # Add other dependencies as needed
             ],
         )
@@ -135,5 +130,3 @@ with DAG("analyze_organism", description="MFA of organism",
     empty = EmptyOperator(task_id="regions_end")
     empty.set_upstream(dag.get_task(f"regions_{len(data)}"))
     # DAG for graphing
-
-

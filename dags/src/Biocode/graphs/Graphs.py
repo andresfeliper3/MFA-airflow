@@ -320,7 +320,7 @@ class Graphs:
         plt.xlabel('Representative percentage of the sequence')
         plt.ylabel('Absolute Value')
         if save:
-            Graphs._savefig(title, name)
+            Graphs._savefig(title, f"{name}/coverage")
         plt.show()
 
     @staticmethod

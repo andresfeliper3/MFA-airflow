@@ -26,13 +26,21 @@ class DBConnectionManager:
         existing_record = DBConnectionManager.cursor.fetchone()
 
         if existing_record:
+            existing_record_id = existing_record[0]  # Assuming the id is the first element of the tuple
             print(f"Record {record} already exists. Skipping insertion.")
+            print("existing record")
+            print(existing_record)
+            return existing_record_id
         else:
             insert_query = f'INSERT INTO {table_name} ({", ".join(columns)}) VALUES ({", ".join(["?"] * len(columns))});'
             DBConnectionManager.cursor.execute(insert_query, tuple(record))
 
+        print("existing record")
+        print(existing_record)
         DBConnectionManager.conn.commit()
         last_inserted_id = DBConnectionManager.cursor.lastrowid
+        print("last inserted id")
+        print(last_inserted_id)
         return last_inserted_id
 
     @staticmethod

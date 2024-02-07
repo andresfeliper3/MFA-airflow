@@ -65,3 +65,9 @@ class SequenceManagerInterface:
         self.calculate_multifractal_analysis_values()
         self.graph_multifractal_analysis()
         self.graph_coverage()
+
+    def set_cover(self, cover):
+        self.cover = cover
+
+    def set_cover_percentage(self, cover_percentage):
+        self.cover_percentage = cover_percentage
