@@ -128,6 +128,14 @@ class GenomeManagerInterface:
         self.df_results['DDq'] = [data_dict['DDq'] for data_dict in mfa_results]
         self.df_results['t(q=20)'] = [data_dict['tau_q_values'][-1] for data_dict in mfa_results]
 
+        # Set the index based on the type of row_labels
+        if any('_region_' in label for label in row_labels):
+            # Row labels correspond to chromosome regions
+            self.df_results.index.name = 'Region'
+        else:
+            # Row labels correspond to whole chromosomes
+            self.df_results.index.name = 'Chromosome'
+
         selected_df_results = self.df_results[selected_columns] if selected_columns else self.df_results
         self._save_df_results(selected_df_results, sheet)
         return selected_df_results
@@ -145,11 +153,10 @@ class GenomeManagerInterface:
             # Load the existing Excel file
             with pd.ExcelFile(output_file) as xls:
                 # Read the existing sheets into a dictionary of DataFrames
-                sheets = {sheet_name: xls.parse(sheet_name) for sheet_name in xls.sheet_names}
+                sheets = {sheet_name: xls.parse(sheet_name, index_col=0) for sheet_name in xls.sheet_names}
 
             # Add the new sheet to the dictionary
             sheets[sheet] = df
-
             # Save all sheets back to the Excel file
             with pd.ExcelWriter(output_file, engine='xlsxwriter') as writer:
                 for sheet_name, sheet_df in sheets.items():
