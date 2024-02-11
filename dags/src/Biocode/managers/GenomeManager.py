@@ -101,6 +101,15 @@ class GenomeManager(GenomeManagerInterface):
                                                  list_to_str(result['DDq'])))
 
 
+    def set_cover(self, cover: list):
+        self.cover = cover
+        for index, manager in enumerate(self.managers):
+            manager.set_cover(self.cover[index])
+
+    def set_cover_percentage(self, cover_percentage: list):
+        self.cover_percentage = cover_percentage
+        for index, manager in enumerate(self.managers):
+            manager.set_cover_percentage(self.cover_percentage[index])
 
     def get_organism_name(self):
         return self.organism_name

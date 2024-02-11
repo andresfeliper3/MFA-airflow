@@ -70,11 +70,17 @@ class SequenceManager(SequenceManagerInterface):
         if degrees_of_multifractality:
             print(f"The degree of multifractality of {self.sequence_name} is {self.degree_of_multifractality}")
 
-    def graph_coverage(self):
-        Graphs.graph_coverage(values=self.cover, sequence_name=self.sequence_name, name=f"{self.organism_name}/whole")
+    def graph_coverage(self, subfolder="whole"):
+        Graphs.graph_coverage(values=self.cover, sequence_name=self.sequence_name, name=f"{self.organism_name}/{subfolder}")
 
     def set_organism_name(self, organism_name):
         self.organism_name = organism_name
+
+    def set_cover(self, cover):
+        self.cover = cover
+
+    def set_cover_percentage(self, cover_percentage):
+        self.cover_percentage = cover_percentage
 
     def get_sequence_name(self) -> str:
         return self.sequence_name

@@ -31,7 +31,6 @@ class RegionSequenceManager(SequenceManagerInterface):
 
         # list of regions (Sequences)
         self.regions = self.sequence.get_regions()
-
         # managers
         self.managers = []
         self._attach_managers()
@@ -113,12 +112,21 @@ class RegionSequenceManager(SequenceManagerInterface):
             self.graph_degree_of_multifractality(y_range=y_range_degrees_of_multifractality, top_labels=top_labels)
 
     def graph_coverage(self):
-        for index, cover in enumerate(self.cover):
-            Graphs.graph_coverage(values=cover, sequence_name=self.regions[index].get_name(),
-                                  name=f"{self.organism_name}/regions")
+        for manager in self.managers:
+            manager.set_organism_name(self.organism_name)
+            manager.graph_coverage(subfolder="regions")
+
 
     def set_sequence_name(self, sequence_name):
         self.sequence_name = sequence_name
+
+    def set_cover(self, cover):
+        for index, manager in enumerate(self.managers):
+            manager.set_cover(cover[index])
+
+    def set_cover_percentage(self, cover_percentage):
+        for index, manager in enumerate(self.managers):
+            manager.set_cover_percentage(cover_percentage[index])
 
     def get_sequence_name(self):
         return self.sequence_name

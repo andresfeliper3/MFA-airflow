@@ -43,6 +43,7 @@ class GenomeManagerInterface:
                 self.regions_names = []
                 self._attach_regions_names()
 
+
         # name of organism
         self.organism_name = organism_name
         # mfa results
@@ -175,11 +176,7 @@ class GenomeManagerInterface:
         self.degrees_of_multifractality = degrees_of_multifractality
 
     def set_cover(self, cover: list):
-        self.cover = cover
-        for index, manager in enumerate(self.managers):
-            manager.set_cover(self.cover[index])
+        pass
 
     def set_cover_percentage(self, cover_percentage: list):
-        self.cover_percentage = cover_percentage
-        for index, manager in enumerate(self.managers):
-            manager.set_cover_percentage(self.cover_percentage[index])
+        pass

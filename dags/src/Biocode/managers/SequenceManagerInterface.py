@@ -67,7 +67,7 @@ class SequenceManagerInterface:
         self.graph_coverage()
 
     def set_cover(self, cover):
-        self.cover = cover
+        pass
 
     def set_cover_percentage(self, cover_percentage):
-        self.cover_percentage = cover_percentage
+        pass

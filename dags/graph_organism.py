@@ -25,9 +25,6 @@ def load_data_whole():
     df = whole_results_service.extract_results()
     DBConnectionManager.close()
 
-    # Install required packages
-    subprocess.check_call(["pip", "install", "matplotlib"])
-
     # Push the DataFrame to XCom
     return df.to_dict(orient='records')
 
@@ -46,16 +43,12 @@ def load_data_regions():
     df = region_results_service.extract_results()
     DBConnectionManager.close()
     print(df)
-    # Install required packages
-    subprocess.check_call(["pip", "install", "matplotlib"])
 
     # Push the DataFrame to XCom
     return df.to_dict(orient='records')
 
 
 def graph_whole(**context):
-    # Install required packages
-    subprocess.check_call(["pip", "install", "biopython"])
     _set_path()
     from src.Biocode.managers.GenomeManager import GenomeManager
     from src.load import data, ORGANISM_NAME
@@ -91,9 +84,10 @@ def graph_whole(**context):
     genome_manager.set_cover_percentage(cover_percentage)
     genome_manager.set_degrees_of_multifractality(degrees_of_multifractality)
 
+    genome_manager.generate_df_results();
+
     genome_manager.graph_degrees_of_multifractality()
     genome_manager.graph_multifractal_analysis_merged()
-    print(genome_manager.get_managers())
 
     genome_manager.graph_coverage()
 
@@ -106,10 +100,8 @@ def graph_whole_coverage(**context):
     genome_manager.set_cover(cover)
     genome_manager.set_cover_percentage(cover_percentage)
 
+
 def graph_regions(**context):
-    # Install required packages
-    subprocess.check_call(["pip", "install", "biopython"])
-    subprocess.check_call(["pip", "install", "matplotlib"])
     _set_path()
     from src.Biocode.managers.RegionGenomeManager import RegionGenomeManager
     from src.load import data, ORGANISM_NAME, REGIONS_NUMBER
@@ -147,8 +139,11 @@ def graph_regions(**context):
     region_genome_manager.set_cover_percentage(cover_percentage)
     region_genome_manager.set_degrees_of_multifractality(degrees_of_multifractality)
 
+    region_genome_manager.generate_df_results()
+
     region_genome_manager.graph_degrees_of_multifractality()
     region_genome_manager.graph_multifractal_analysis_merged()
+
     region_genome_manager.graph_coverage()
 
 
@@ -170,12 +165,6 @@ with DAG("graph_organism", description="Graphs of organism",
         python_callable=graph_whole,
         provide_context=True,
     )
-    """
-    whole_graphs_coverage = PythonOperator(
-        task_id="whole_graphs_coverage",
-        python_callable=graph_whole_coverage,
-        provide_context=True
-    )"""
 
     sensor_regions = ExternalTaskSensor(task_id="waiting_dag_regions",
                                         external_dag_id="analyze_organism",
@@ -193,4 +182,5 @@ with DAG("graph_organism", description="Graphs of organism",
     sensor_whole >> load_whole >> whole_graphs
     sensor_regions >> load_regions >> regions_graphs
 
-    # graph ergions coverage
+    # linear fit missing
+

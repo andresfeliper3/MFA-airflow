@@ -147,6 +147,18 @@ class RegionGenomeManager(GenomeManagerInterface):
     def set_organism_name(self, organism_name):
         self.organism_name = organism_name
 
+    def set_cover(self, cover: list):
+        self.cover = cover
+        for index, manager in enumerate(self.managers):
+            start_index_of_chr = index * self.regions_number
+            manager.set_cover(self.cover[start_index_of_chr:start_index_of_chr + self.regions_number])
+
+    def set_cover_percentage(self, cover_percentage: list):
+        self.cover_percentage = cover_percentage
+        for index, manager in enumerate(self.managers):
+            start_index_of_chr = index * self.regions_number
+            manager.set_cover_percentage(self.cover_percentage[start_index_of_chr:start_index_of_chr + self.regions_number])
+
     def get_organism_name(self):
         return self.organism_name
 
