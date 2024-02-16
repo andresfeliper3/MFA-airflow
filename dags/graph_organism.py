@@ -16,13 +16,14 @@ def load_data_whole():
         _set_path()
         from src.Biocode.services.WholeResultsService import WholeResultsService
         from src.Biocode.managers.DBConnectionManager import DBConnectionManager
+        from src.load import GCF
     except ImportError as e:
         print(f"Error importing necessary modules: {e}")
         raise
 
     DBConnectionManager.start()
     whole_results_service = WholeResultsService()
-    df = whole_results_service.extract_results()
+    df = whole_results_service.extract_results(GCF=GCF)
     DBConnectionManager.close()
 
     # Push the DataFrame to XCom
@@ -34,13 +35,14 @@ def load_data_regions():
         _set_path()
         from src.Biocode.services.RegionResultsService import RegionResultsService
         from src.Biocode.managers.DBConnectionManager import DBConnectionManager
+        from src.load import GCF
     except ImportError as e:
         print(f"Error importing necessary modules: {e}")
         raise
 
     DBConnectionManager.start()
     region_results_service = RegionResultsService()
-    df = region_results_service.extract_results()
+    df = region_results_service.extract_results(GCF=GCF)
     DBConnectionManager.close()
     print(df)
 

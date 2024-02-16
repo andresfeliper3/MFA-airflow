@@ -8,9 +8,10 @@ class RegionResultsService(AbstractService):
         self.columns = ["regions_number", "chromosome_id", "Dq_values", "tau_q_values", "DDq"]
         self.pk_column = "id"
 
-    def extract_results(self):
+    def extract_results(self, GCF):
         query = f"SELECT chr_region_results.id as results_id, o.name as organism_name, chromosomes.id as chromosome_id \
-                    , chromosomes.name as sequence_name, DDq, " \
-                f"Dq_values, tau_q_values, cover, cover_percentage FROM chr_region_results  JOIN chromosomes ON " \
-                f"chr_region_results.chromosome_id = chromosomes.id JOIN organisms o on chromosomes.organism_id = o.id;"
+                    , chromosomes.name as sequence_name, DDq, Dq_values, tau_q_values, cover, cover_percentage FROM chr_region_results  JOIN chromosomes ON " \
+                f"chr_region_results.chromosome_id = chromosomes.id JOIN organisms o on chromosomes.organism_id = o.id " \
+                f"WHERE o.GCF = '{GCF}';"
         return DBConnectionManager.extract_with_custom_query(query)
+

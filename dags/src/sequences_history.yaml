@@ -1,0 +1,21 @@
+sequences_folder: "Biocode/dna_sequences"
+
+organism_name: "Caenorhabditis elegans"
+GCF: "GCF_000002985.6"
+amount_chromosomes: 6
+regions_number: 3
+organism_folder: "Caenorhabditis_elegans"
+
+
+#organism_name: "MicromoGCF_000090985.2nas commoda"
+#GCF: ""
+#download_url: 'https://ftp.ncbi.nlm.nih.gov/genomes/refseq/plant/Micromonas_commoda/latest_assembly_versions/GCF_000090985.2_ASM9098v2/GCF_000090985.2_ASM9098v2_assembly_structure/Primary_Assembly/assembled_chromosomes/FASTA/'
+#amount_chromosomes: 17
+#regions_number: 3
+#organism_folder: "Micromonas_commoda"
+
+#organism_name: "Musa acuminata"
+#CF: "GCF_000313855.2"
+##download_url: 'https://ftp.ncbi.nlm.nih.gov/genomes/refseq/plant/Musa_acuminata/latest_assembly_versions/GCF_000313855.2_ASM31385v2/GCF_000313855.2_ASM31385v2_assembly_structure/Primary_Assembly/assembled_chromosomes/FASTA/'
+#regions_number: 3
+#organism_folder: "Musa_acuminata"

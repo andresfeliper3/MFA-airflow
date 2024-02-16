@@ -28,19 +28,28 @@ def read_fasta_sequence(file_path):
 
 ORGANISM_NAME = config['organism_name']
 GCF = config['GCF']
-AMOUNT_CHROMOSOMES = config['amount_chromosomes']
 REGIONS_NUMBER = config['regions_number']
 ORGANISM_FOLDER = config['organism_folder']
+DOWNLOAD_URL = config['download_url']
 
 organism_path = os.path.abspath(os.path.join(sequences_folder, ORGANISM_FOLDER))
 
 
 def create_sequence_data_dict(path):
+    if not os.path.exists(path):
+        os.makedirs(path)
+
     files = os.listdir(path)
+    sorted_files = sorted(files,
+                          key=lambda x: int(x.rstrip('.fna')[3:]) if x.rstrip('.fna')[3:].isdigit() else float('inf'))
+
     return [
         {"path": os.path.join(path, file), "name": file.split(".")[0]}
-        for file in files
+        for file in sorted_files
     ]
 
 
 data = create_sequence_data_dict(organism_path)
+AMOUNT_CHROMOSOMES = len(data)
+
+print(data)

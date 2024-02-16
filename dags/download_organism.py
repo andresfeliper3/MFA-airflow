@@ -8,11 +8,30 @@ from shutil import unpack_archive
 import os
 import subprocess
 
+from src.load import ORGANISM_FOLDER
+
 # Get the path to the directory of the current script
 current_script_directory = os.path.dirname(os.path.abspath(__file__))
-ORGANISM_FOLDER = "Caenorhabditis_elegans"
 
 SUBFOLDER = f'src/Biocode/dna_sequences/{ORGANISM_FOLDER}'
+
+
+def remove_files():
+    directory_path = os.path.join(current_script_directory, SUBFOLDER)
+
+    if os.path.exists(directory_path) and os.path.isdir(directory_path):
+        files = os.listdir(directory_path)
+
+        for file in files:
+            file_path = os.path.join(directory_path, file)
+
+            try:
+                os.remove(file_path)
+                print(f"Deleted: {file_path}")
+            except Exception as e:
+                print(f"Error deleting {file_path}: {e}")
+    else:
+        print(f"The directory {directory_path} does not exist.")
 
 
 def clean_directory(**kwargs):
@@ -62,11 +81,16 @@ def extract_all_chromosomes(fasta_file):
 
 with DAG("download_organism", description="Download organism genome from the NCBI",
          start_date=datetime(2024, 1, 15), schedule_interval="@once") as dag:
-    files_url = 'https://ftp.ncbi.nlm.nih.gov/genomes/refseq/invertebrate/Caenorhabditis_elegans/latest_assembly_versions/GCF_000002985.6_WBcel235/GCF_000002985.6_WBcel235_assembly_structure/Primary_Assembly/assembled_chromosomes/FASTA/'
+    from src.load import DOWNLOAD_URL
 
     # Download command
-    download_command = f'wget --recursive -np -e robots=off --reject "index.html" --no-host-directories --cut-dirs=10 {files_url} -P {current_script_directory}/{SUBFOLDER}'
+    download_command = f'wget --recursive -np -e robots=off --reject "index.html" --no-host-directories ' \
+                       f'--cut-dirs=10 {DOWNLOAD_URL} -P {current_script_directory}/{SUBFOLDER}'
 
+    t_remove = PythonOperator(
+        task_id="remove_files",
+        python_callable=remove_files
+    )
     # BashOperator task to download genome
     t_download = BashOperator(
         task_id='download_genome',
@@ -87,8 +111,5 @@ with DAG("download_organism", description="Download organism genome from the NCB
     )
 
     # Set task dependencies
-    t_download >> t_clean >> t_uncompress
-
-
-    # Read the chromosomes and use YAML (in progress) - check ORGANISM_FOLDER
+    t_remove >> t_download >> t_clean >> t_uncompress
 

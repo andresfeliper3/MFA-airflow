@@ -15,6 +15,7 @@ def load_organism(organism_name, gcf, amount_chromosomes):
     from src.Biocode.managers.DBConnectionManager import DBConnectionManager
     from src.Biocode.services.OrganismsService import OrganismsService
 
+    print("Entered task")
     DBConnectionManager.start()
     organism_service = OrganismsService()
     organism_service.insert(record=(organism_name, gcf, amount_chromosomes))
