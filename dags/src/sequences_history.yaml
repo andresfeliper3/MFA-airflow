@@ -2,9 +2,8 @@ sequences_folder: "Biocode/dna_sequences"
 
 organism_name: "Caenorhabditis elegans"
 GCF: "GCF_000002985.6"
-amount_chromosomes: 6
+download_url: "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/invertebrate/Caenorhabditis_elegans/latest_assembly_versions/GCF_000002985.6_WBcel235/GCF_000002985.6_WBcel235_assembly_structure/Primary_Assembly/assembled_chromosomes/FASTA/"
 regions_number: 3
-organism_folder: "Caenorhabditis_elegans"
 
 
 #organism_name: "MicromoGCF_000090985.2nas commoda"
@@ -12,10 +11,23 @@ organism_folder: "Caenorhabditis_elegans"
 #download_url: 'https://ftp.ncbi.nlm.nih.gov/genomes/refseq/plant/Micromonas_commoda/latest_assembly_versions/GCF_000090985.2_ASM9098v2/GCF_000090985.2_ASM9098v2_assembly_structure/Primary_Assembly/assembled_chromosomes/FASTA/'
 #amount_chromosomes: 17
 #regions_number: 3
-#organism_folder: "Micromonas_commoda"
 
 #organism_name: "Musa acuminata"
 #CF: "GCF_000313855.2"
 ##download_url: 'https://ftp.ncbi.nlm.nih.gov/genomes/refseq/plant/Musa_acuminata/latest_assembly_versions/GCF_000313855.2_ASM31385v2/GCF_000313855.2_ASM31385v2_assembly_structure/Primary_Assembly/assembled_chromosomes/FASTA/'
 #regions_number: 3
-#organism_folder: "Musa_acuminata"
+
+#organism_name: "Drosophila melanogaster"
+#GCF: "GCF_000001215.4"
+#download_url: "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/invertebrate/Drosophila_melanogaster/latest_assembly_versions/GCF_000001215.4_Release_6_plus_ISO1_MT/GCF_000001215.4_Release_6_plus_ISO1_MT_assembly_structure/Primary_Assembly/assembled_chromosomes/FASTA/"
+#regions_number: 3
+
+#organism_name: "Nematostella vectensis"
+#GCF: "GCF_932526225.1"
+#download_url: "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/invertebrate/Nematostella_vectensis/all_assembly_versions/GCF_932526225.1_jaNemVect1.1/GCF_932526225.1_jaNemVect1.1_assembly_structure/Primary_Assembly/assembled_chromosomes/FASTA/"
+#regions_number: 3
+
+#organism_name: "Acropora millepora"
+#GCF: "GCF_013753865.1"
+#download_url: "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/invertebrate/Acropora_millepora/latest_assembly_versions/GCF_013753865.1_Amil_v2.1/GCF_013753865.1_Amil_v2.1_assembly_structure/Primary_Assembly/assembled_chromosomes/FASTA/"
+#regions_number: 3

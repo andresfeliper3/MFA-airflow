@@ -86,7 +86,7 @@ def graph_whole(**context):
     genome_manager.set_cover_percentage(cover_percentage)
     genome_manager.set_degrees_of_multifractality(degrees_of_multifractality)
 
-    genome_manager.generate_df_results();
+    genome_manager.generate_df_results()
 
     genome_manager.graph_degrees_of_multifractality()
     genome_manager.graph_multifractal_analysis_merged()
@@ -154,7 +154,7 @@ with DAG("graph_organism", description="Graphs of organism",
     sensor_whole = ExternalTaskSensor(task_id="waiting_dag_whole",
                                       external_dag_id="analyze_organism",
                                       external_task_id="whole_end",
-                                      poke_interval=200
+                                      poke_interval=100
                                       )
 
     load_whole = PythonOperator(task_id="load_data_whole",
@@ -171,7 +171,7 @@ with DAG("graph_organism", description="Graphs of organism",
     sensor_regions = ExternalTaskSensor(task_id="waiting_dag_regions",
                                         external_dag_id="analyze_organism",
                                         external_task_id="regions_end",
-                                        poke_interval=200)
+                                        poke_interval=100)
 
     load_regions = PythonOperator(task_id="load_data_regions",
                                   python_callable=load_data_regions,

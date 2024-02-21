@@ -54,7 +54,7 @@ class Graphs:
         plt.ylabel(y_label)
         plt.title(title)
         plt.grid()
-        plt.legend()
+        plt.legend(loc='upper left', bbox_to_anchor=(1, 1),  ncol=2)
         if save:
             Graphs._savefig(title, name)
         plt.show()
@@ -93,7 +93,7 @@ class Graphs:
         plt.ylabel(y_label)
         plt.title(title)
         plt.grid()
-        plt.legend()
+        plt.legend(loc='upper left', bbox_to_anchor=(1, 1),  ncol=2)
         if save:
             Graphs._savefig(title, name)
         plt.show()
@@ -322,6 +322,36 @@ class Graphs:
         if save:
             Graphs._savefig(title, f"{name}/coverage")
         plt.show()
+
+        Graphs.graph_stacked_coverage(values, sequence_name, name, True)
+
+    @staticmethod
+    def graph_stacked_coverage(values: list[int], sequence_name: str, name, save=True):
+        fig, ax = plt.subplots(figsize=(5, 500))
+
+        # Separate positive and negative values for stacking
+        positive_values = [max(0, value) for value in values]
+        negative_values = [min(0, value) for value in values]
+
+        # Initialize the starting point of the bars
+        current_position = 0
+
+        # Create intercalary sections of green and red stacks
+        for positive, negative in zip(positive_values, negative_values):
+            ax.bar(0, positive, color='green', bottom=current_position)
+            current_position += positive
+            ax.bar(0, abs(negative), color='red', bottom=current_position)
+            current_position += abs(negative)
+
+        # Set labels and title
+        title = f"Coverage of the sequence {sequence_name}"
+        ax.set_ylabel(title)
+        ax.set_title('Order (bottom-up)')
+
+        if save:
+            Graphs._savefig(title, f"{name}/stacked_coverage")
+        plt.show()
+
 
     @staticmethod
     def graph_vertical_coverage(values: list[int], sequence_name: str, name, save=True):

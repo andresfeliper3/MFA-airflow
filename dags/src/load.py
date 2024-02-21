@@ -25,16 +25,6 @@ def read_fasta_sequence(file_path):
 
     return sequence
 
-
-ORGANISM_NAME = config['organism_name']
-GCF = config['GCF']
-REGIONS_NUMBER = config['regions_number']
-ORGANISM_FOLDER = config['organism_folder']
-DOWNLOAD_URL = config['download_url']
-
-organism_path = os.path.abspath(os.path.join(sequences_folder, ORGANISM_FOLDER))
-
-
 def create_sequence_data_dict(path):
     if not os.path.exists(path):
         os.makedirs(path)
@@ -48,6 +38,14 @@ def create_sequence_data_dict(path):
         for file in sorted_files
     ]
 
+
+ORGANISM_NAME = config['organism_name']
+GCF = config['GCF']
+REGIONS_NUMBER = config['regions_number']
+ORGANISM_FOLDER = ORGANISM_NAME.replace(" ", "_")
+DOWNLOAD_URL = config['download_url']
+
+organism_path = os.path.abspath(os.path.join(sequences_folder, ORGANISM_FOLDER))
 
 data = create_sequence_data_dict(organism_path)
 AMOUNT_CHROMOSOMES = len(data)

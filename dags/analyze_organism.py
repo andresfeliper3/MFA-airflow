@@ -58,7 +58,6 @@ def regions_MFA(organism_name, gcf, chromosome, regions_number):
                                                 regions_number=regions_number)
     region_genome_manager.calculate_multifractal_analysis_values()
     region_genome_manager.save_to_db(GCF=gcf)
-    region_genome_manager.generate_df_results()
 
     print(region_genome_manager.get_mfa_results())
     DBConnectionManager.close()

@@ -17,7 +17,6 @@ class GenomeManager(GenomeManagerInterface):
                  organism_name: str = None):
         super().__init__(genome, genome_data, chromosomes, organism_name, 0)
 
-
     def generate_degrees_of_multifractality(self):
         for manager in self.managers:
             manager.generate_degree_of_multifractality()
@@ -99,7 +98,6 @@ class GenomeManager(GenomeManagerInterface):
             whole_results_service.insert(record=(chromosome_id, list_to_str(result['Dq_values'].tolist()),
                                                  list_to_str(result['tau_q_values'].tolist()),
                                                  list_to_str(result['DDq'])))
-
 
     def set_cover(self, cover: list):
         self.cover = cover
