@@ -9,6 +9,7 @@ from src.Biocode.managers.RegionSequenceManager import RegionSequenceManager
 
 
 from src.Biocode.utils.utils import list_to_str, str_to_list
+from utils.logger import logger
 
 
 class GenomeManagerInterface:
@@ -88,6 +89,7 @@ class GenomeManagerInterface:
         """Generate mfa generators, generate mfa values, attach the degrees of multifractality, the cover and cover 
         percentage"""
         for manager in self.managers:
+            logger.info(f"Starting chromosome: {manager.get_sequence_name()}")
             manager.calculate_multifractal_analysis_values()
             self.cover.append(manager.get_cover())
             self.cover_percentage.append(manager.get_cover_percentage())

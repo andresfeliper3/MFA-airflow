@@ -3,6 +3,8 @@ from src.Biocode.sequences.Sequence import Sequence
 
 from src.Biocode.graphs.Graphs import Graphs
 
+from utils.logger import logger
+
 class CGR:
     def __init__(self, sequence: Sequence, corners=None):
         self.mi_grid = None
@@ -74,7 +76,7 @@ class CGR:
 
         # Iterate through the sequence and plot points
         last_exists = True if self.seq[0] in self.corners else False
-        for nucleotide in self.seq:
+        for seq_index, nucleotide in enumerate(self.seq):
             if nucleotide in self.corners:
                 corner = self.corners[nucleotide]
                 if last_exists:
@@ -99,6 +101,9 @@ class CGR:
                 current_position[1] // epsilon) - 1
             col = int(current_position[0] // epsilon) if int(current_position[0] // epsilon) < self.grid_size else int(
                 current_position[0] // epsilon) - 1
+
+            if seq_index % 1000000 == 0:
+                logger.info(f"In nucleotide: {seq_index}")
 
             # Increment the count for the current grid cell
             try:
