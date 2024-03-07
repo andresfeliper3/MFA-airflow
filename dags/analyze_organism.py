@@ -26,12 +26,14 @@ def whole_MFA(organism_name, gcf, chromosome):
     try:
         import os
         import sys
+        import time
         sys.path.insert(0, os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
         from src.Biocode.managers.GenomeManager import GenomeManager
         from src.Biocode.managers.DBConnectionManager import DBConnectionManager
     except ImportError as e:
         print(f"Error importing necessary modules: {e}")
         raise
+    start_time = time.time()
     DBConnectionManager.start()
     genome_manager = GenomeManager(genome_data=[chromosome], organism_name=organism_name)
     genome_manager.calculate_multifractal_analysis_values()
@@ -40,6 +42,9 @@ def whole_MFA(organism_name, gcf, chromosome):
 
     print(genome_manager.get_mfa_results())
     DBConnectionManager.close()
+    end_time = time.time()
+    elapsed_time = end_time - start_time
+    print(f"The process took {elapsed_time} seconds.")
 
 
 def regions_MFA(organism_name, gcf, chromosome, regions_number):
@@ -86,10 +91,7 @@ with DAG("analyze_organism", description="MFA of organism",
             python_callable=whole_MFA,
             op_args=[ORGANISM_NAME, GCF, chromosome_data],
             requirements=[
-                "biopython",
-                "xlsxwriter",
-                "openpyxl",
-                "matplotlib"
+
                 # Add other dependencies as needed
             ],
         )
@@ -112,10 +114,6 @@ with DAG("analyze_organism", description="MFA of organism",
             python_callable=regions_MFA,
             op_args=[ORGANISM_NAME, GCF, chromosome_data, REGIONS_NUMBER],
             requirements=[
-                "biopython",
-                "xlsxwriter",
-                "openpyxl",
-                "matplotlib"
                 # Add other dependencies as needed
             ],
         )
