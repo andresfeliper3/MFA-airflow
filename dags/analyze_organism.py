@@ -38,7 +38,6 @@ def whole_MFA(organism_name, gcf, chromosome):
     genome_manager = GenomeManager(genome_data=[chromosome], organism_name=organism_name)
     genome_manager.calculate_multifractal_analysis_values()
     genome_manager.save_to_db(GCF=gcf)
-    genome_manager.generate_df_results()
 
     print(genome_manager.get_mfa_results())
     DBConnectionManager.close()

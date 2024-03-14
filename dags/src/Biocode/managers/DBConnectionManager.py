@@ -35,12 +35,8 @@ class DBConnectionManager:
             insert_query = f'INSERT INTO {table_name} ({", ".join(columns)}) VALUES ({", ".join(["?"] * len(columns))});'
             DBConnectionManager.cursor.execute(insert_query, tuple(record))
 
-        print("existing record")
-        print(existing_record)
         DBConnectionManager.conn.commit()
         last_inserted_id = DBConnectionManager.cursor.lastrowid
-        print("last inserted id")
-        print(last_inserted_id)
         return last_inserted_id
 
     @staticmethod

@@ -1,8 +1,8 @@
 sequences_folder: "Biocode/dna_sequences"
 
-organism_name: "Musa acuminata"
-GCF: "GCF_000313855.2"
-download_url: 'https://ftp.ncbi.nlm.nih.gov/genomes/refseq/plant/Musa_acuminata/latest_assembly_versions/GCF_000313855.2_ASM31385v2/GCF_000313855.2_ASM31385v2_assembly_structure/Primary_Assembly/assembled_chromosomes/FASTA/'
+organism_name: "Caenorhabditis elegans 2008"
+GCF: "GCF_000002985.4"
+download_url: "https://ftp.ncbi.nlm.nih.gov/genomes/refseq/invertebrate/Octopus_sinensis/all_assembly_versions/GCF_006345805.1_ASM634580v1/GCF_006345805.1_ASM634580v1_assembly_structure/Primary_Assembly/assembled_chromosomes/FASTA/"
 regions_number: 3
 
 
