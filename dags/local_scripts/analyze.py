@@ -7,7 +7,7 @@ sys.path.append(project_root)  # Add the project root to the Python path
 
 from src.Biocode.managers.GenomeManager import GenomeManager
 from src.Biocode.managers.DBConnectionManager import DBConnectionManager
-from src.load import data, ORGANISM_NAME, GCF, AMOUNT_CHROMOSOMES, REGIONS_NUMBER
+from local_scripts.load import data, ORGANISM_NAME, GCF, AMOUNT_CHROMOSOMES, REGIONS_NUMBER
 from utils.logger import logger
 from utils.timer import timer
 
